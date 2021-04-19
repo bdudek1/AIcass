@@ -1,0 +1,22 @@
+.TrainMe {
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: rgb(51, 183, 238, 0.5) 3px 3px 6px 0px inset, rgba(200, 200, 200, 0.5) -3px -3px 6px 1px inset;
+    /* box-shadow: 0px 10px 14px -7px rgb(51, 183, 238, 0.8); */
+    max-width: 750px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    width: 90%;
+    margin: auto;
+    margin-top: 72px;
+    font-size: larger;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: ease-in-out 0.5s all;
+}
+
+.TrainMe:hover {
+    box-shadow: rgb(200, 200, 200, 0.5) 3px 3px 6px 0px inset, rgba(51, 183, 238, 0.5) -3px -3px 6px 1px inset;
+}

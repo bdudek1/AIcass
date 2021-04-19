@@ -1,0 +1,39 @@
+.MarkViewButton {
+	background-color:#33B7EE;
+	border-radius:4px;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:10px;
+	padding:2px 2px;
+	align-content: center;
+	justify-content: center;
+	justify-items: center;
+    text-align: center;
+    text-decoration: none !important;
+    border: none;
+    display: -ms-flexbox;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    font-weight: 900;
+	line-height: 15px;
+    margin-top: 3px;
+    margin-right: 5px;
+    float: right;
+    width: 70px;
+	transition: 0.5s;
+    position: relative;
+    z-index: 100000;
+}
+
+.Tooltip {
+    font-weight: 400 !important;
+}
+
+.AsView {
+    background-color:#33B7EE;
+}
+
+.AsNonView {
+    background-color:#B637F1;
+}

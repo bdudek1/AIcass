@@ -1,0 +1,67 @@
+.ImageRowContainer {
+    height: fit-content;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: none;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    align-content: center;
+    overflow: auto;
+    transition: 0.3s ease-in-out all;
+}
+
+.ImageRowContainer:hover {
+        border-radius: 17px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.ImageRowDisplay {
+        height: 200px;
+        padding: 15px;
+        border-radius: 5px;
+        border-style: groove;
+        border-color: #3336ee;
+        width: 95%;
+        margin: auto;
+        align-content: center;
+        overflow: auto;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
+        transition: 0.15s ease-in-out all;
+}
+
+.ImageRowDisplay > div {
+    display:table-row;
+}
+
+@media (max-width: 768px){
+	.ImageRowContainer {
+                padding: 10px;
+                width: 92%
+	}
+        .ImageRowContainer:hover {
+                border-radius: 13px;
+        }
+        .ImageRowDisplay {
+                padding: 10px;
+                height: 170px;
+                width: 97%;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 4px 18px 0px;
+        }
+}
+
+@media (max-width: 500px){
+	.ImageRowContainer {
+        padding: 5px;
+        width: 95%
+	}
+        .ImageRowContainer:hover {
+                border-radius: 13px;
+        }
+        .ImageRowDisplay {
+                padding: 5px;
+                height: 150px;
+                width: 99%;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 2px 7px 0px;
+        }
+}

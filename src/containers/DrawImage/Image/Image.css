@@ -1,0 +1,36 @@
+.Image {
+    height: fit-content;
+    padding: 10px;
+    padding-top: 25px;
+    border-radius: 5px;
+    box-shadow: none;
+    width: 90%;
+    max-width: 700px;
+    margin: auto;
+    align-content: center;
+    transition: 0.3s ease-in-out all;
+}
+
+.Image:hover {
+        border-radius: 17px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
+}
+
+@media (max-width: 768px){
+	.Image {
+        padding: 7px;
+        padding-top: 20px;
+        width: 92%
+	}
+        .Image:hover {
+                border-radius: 13px;
+        }
+}
+
+@media (max-width: 500px){
+	.Image {
+                padding: 5px;
+                padding-top: 15px;
+                width: 95%
+	}
+}

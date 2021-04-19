@@ -1,0 +1,29 @@
+.ImageRow{
+    text-align: left;
+    font-size: 16px;
+    border-radius: 30px;
+    color: rgb(87, 87, 87, 0.9);
+    transition: 0.3s;
+    margin: 1px;
+}
+
+.HidingIcon{
+    margin-bottom: 0px;
+    margin-right: 10px;
+    color-adjust: rgb(87, 87, 87, 0.66);
+    float: right;
+}
+
+.ImageRow:hover{
+    box-shadow: 5px 2px 10px -2px rgb(87, 87, 87, 0.66);
+    color: #3336ee !important;
+    cursor: pointer;
+}
+
+.ImageRowTooltip{
+    display: -ms-flexbox;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+}
+
+

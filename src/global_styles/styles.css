@@ -1,0 +1,33 @@
+.TextStyle{
+    font-size:21px;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    width: 75%;
+    margin: auto;
+}
+
+@media (max-width: 768px) {
+    .TextStyle{
+        font-size:17px;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        width: 80%;
+        margin: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .TextStyle{
+        font-size:16px;
+        width: 90%;
+    }
+}
+
+@media (max-width: 400px) {
+    .TextStyle{
+        font-size:14px;
+        width: 95%;
+    }
+}

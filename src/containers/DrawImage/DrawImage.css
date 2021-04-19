@@ -1,0 +1,23 @@
+.DrawImage {
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: rgb(51, 183, 238, 0.5) 3px 3px 6px 0px inset, rgba(200, 200, 200, 0.5) -3px -3px 6px 1px inset;
+    max-width: 700px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    width: 90%;
+    margin: auto;
+    margin-top: 72px;
+    padding: 10px;
+    font-size: larger;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: ease-in-out 0.5s all;
+}
+
+.DrawImage:hover {
+    box-shadow: rgb(200, 200, 200, 0.5) 3px 3px 6px 0px inset, rgba(51, 183, 238, 0.5) -3px -3px 6px 1px inset;
+}
+
+
