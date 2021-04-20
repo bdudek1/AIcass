@@ -6,7 +6,7 @@ import { usePromiseTracker } from "react-promise-tracker";
 import './Spinner.scss';
 
 const Spinner = () => {
-    const { promiseInProgress } = usePromiseTracker({delay: 50});
+    const { promiseInProgress } = usePromiseTracker();
     const [randomBinary, setRandomBinary] = useState(StringUtils.generateRandomBinaryString(8))
 
     let randomBinaryChangeInterval;

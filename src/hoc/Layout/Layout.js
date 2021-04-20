@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import './Layout.css';
 import Toolbar from '../../components/Navigaton/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigaton/SideDrawer/SideDrawer';
-import AiManager from '../../utils/AiManager';
 import DatabaseManager from '../../utils/DatabaseManager';
 
 class Layout extends Component {
@@ -14,7 +13,6 @@ class Layout extends Component {
 
     componentDidMount() {
         DatabaseManager.tryToInitDatabase()
-        AiManager.setModel();
     }
 
     sideDrawerClosedHandler = () => {

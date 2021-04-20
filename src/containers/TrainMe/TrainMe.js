@@ -22,11 +22,14 @@ import ImageUtils from '../../utils/ImageUtils';
 const TrainMe = () => {
     const { promiseInProgress } = usePromiseTracker();
 
+    const [aiManager, setAiManager] = useState(new AiManager())
+
     const [showUploadImageDialog, setShowUploadImageDialog] = useState(false);
     const [isImageUploaded, setIsImageUploaded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [areAllImagesViews, setAreAllImagesViews] = useState(true);
     const [lastPrediction, setLastPrediction] = useState(0);
+
     const [filesList, setFilesList] = useState(new Array());
 
     let buttonWidth, iconSize;
@@ -52,9 +55,9 @@ const TrainMe = () => {
         }else{
             //train
             setIsLoading(true)
-            AiManager.classifyImage(filesList[0])
+            aiManager.classifyImage(filesList[0])
 
-            AiManager.trainModelByFileList(filesList)
+            aiManager.trainModelByFileList(filesList)
             setIsLoading(false)
         }
     }
@@ -73,7 +76,7 @@ const TrainMe = () => {
                 trackPromise(
                     ImageUtils.loadImage(file).then(image => {
                         file.tensor = ImageUtils.convertImageToTensor(image);
-                        file.viewPrediction = AiManager.classifyImage(file);
+                        file.viewPrediction = aiManager.classifyImage(file);
                         file.isView = file.viewPrediction > 0.5 ? true : false;
                         setLastPrediction(file.viewPrediction)
                         console.log(file.viewPrediction);

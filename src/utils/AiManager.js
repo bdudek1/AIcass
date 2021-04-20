@@ -7,10 +7,14 @@ import labels from './imagenet_labels.json';
 import * as tf from '@tensorflow/tfjs';
 
 class AiManager{
-    static model;
-    static isModelUpToDate = false;
+    model;
+    isModelUpToDate = false;
 
-    static setModel() {
+    constructor() {
+        this.setModel();
+    }
+
+    setModel() {
         DatabaseManager.getModel().then(model => {
             this.model = model;
             this.isModelUpToDate = true;
@@ -23,16 +27,16 @@ class AiManager{
         })
     }
 
-    static classifyImage(file) {
-            const prediction = this.model.predict(file.tensor);
-            const highestPredictions = this.getHighestPredictions(prediction, 10);     
-            console.log(highestPredictions);
+    classifyImage(file) {
+        const prediction = this.model.predict(file.tensor);
+        const highestPredictions = this.getHighestPredictions(prediction, 10);     
+        console.log(highestPredictions);
 
-            return ViewClasses.getViewClassification(highestPredictions);
+        return ViewClasses.getViewClassification(highestPredictions);
     }
 
     //returns a map which key is classification name and value is probability
-    static getHighestPredictions(prediction, predictionsNumber) {
+    getHighestPredictions(prediction, predictionsNumber) {
         const predictionValues = prediction.as1D()
                                            .dataSync()
                                            
@@ -58,7 +62,7 @@ class AiManager{
         return maxValues;
     }
 
-    static trainModelByFileList(files) {
+    trainModelByFileList(files) {
         this.setModel();
 
         if(this.isModelUpToDate) {
@@ -74,12 +78,12 @@ class AiManager{
         }
     }
 
-    static compileModel() {
+    compileModel() {
         this.model.compile({optimizer: 'adam',
                             loss: 'meanSquaredError'})
     }
 
-    static loadMobilenetModel() { 
+    loadMobilenetModel() { 
         return tf.loadLayersModel(process.env.REACT_APP_MOBILENET_PATH);
     }
 
