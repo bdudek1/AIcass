@@ -7,8 +7,6 @@ import DatabaseManager from './DatabaseManager';
 import labels from './imagenet_labels.json';
 
 import * as tf from '@tensorflow/tfjs';
-import ModelBuilder from './ModelBuilder';
-import { models } from '@tensorflow/tfjs';
 
 class AiManager{
     model = undefined;
