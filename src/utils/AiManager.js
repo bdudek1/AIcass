@@ -46,21 +46,23 @@ class AiManager{
     }
 
     classifyLoadedImages(list) {
+        tf.tidy(() => {
 
-        list.forEach(file => {
-            if(!file.tensor){
-                trackPromise(
-                    ImageUtils.loadImage(file).then(image => {
-                        file.tensor = ImageUtils.convertImageToTensor(image);
-                        file.viewPrediction = this.classifyImage(file);
-                        file.isView = file.viewPrediction > 0.5 ? true : false;
+            list.forEach(file => {
+                if(!file.tensor){
+                    trackPromise(
+                        ImageUtils.loadImage(file).then(image => {
+                            file.tensor = ImageUtils.convertImageToTensor(image);
+                            file.viewPrediction = this.classifyImage(file);
+                            file.isView = file.viewPrediction > 0.5 ? true : false;
 
-                        console.log(file.viewPrediction);
-                    })
-                )
-            }
+                            console.log(file.viewPrediction);
+                        })
+                    )
+                }
+            })
+
         })
-
     }
 
     //returns a map which key is classification name and value is probability
@@ -91,7 +93,7 @@ class AiManager{
     }
 
     trainModelByFileList(files) {
-
+        tf.tidy(() => {
             trackPromise(
                 DatabaseManager.getModel().then(mod => {
                     this.compileModel(mod)
@@ -102,16 +104,18 @@ class AiManager{
                     DatabaseManager.setAiModel(mod)
                 })
             )
-
+        })
     }
 
     compileModel(model) {
-        const optimizer = tf.train.adam();
-        model.compile({
-            optimizer: optimizer,
-            loss: 'categoricalCrossentropy',
-            metrics: ['accuracy'],
-        });
+        tf.tidy(() => {
+            const optimizer = tf.train.adam();
+            model.compile({
+                optimizer: optimizer,
+                loss: 'categoricalCrossentropy',
+                metrics: ['accuracy'],
+            });
+        })
     }
 
     loadMobilenet() { 
