@@ -1,3 +1,5 @@
+import { trackPromise } from 'react-promise-tracker';
+
 import ImageUtils from './ImageUtils';
 import ViewClasses from './ViewClasses';
 import DatabaseManager from './DatabaseManager';
@@ -5,34 +7,62 @@ import DatabaseManager from './DatabaseManager';
 import labels from './imagenet_labels.json';
 
 import * as tf from '@tensorflow/tfjs';
+import ModelBuilder from './ModelBuilder';
+import { models } from '@tensorflow/tfjs';
 
 class AiManager{
-    model;
-    isModelUpToDate = false;
+    model = undefined;
+    mobilenetModel = undefined;
 
     constructor() {
-        this.setModel();
+        this.loadModel()
     }
 
-    setModel() {
+    loadModel() {
+        this.loadMobilenetModel();
         DatabaseManager.getModel().then(model => {
-            this.model = model;
-            this.isModelUpToDate = true;
-            this.compileModel()
+            this.model = model
         }).catch(error => {
-            this.loadMobilenetModel().then(model => {
-                this.model = model;
-                this.isModelUpToDate = false;
-            })
+            console.log(error)
         })
     }
 
+    loadMobilenetModel() {
+        this.loadMobilenet().then(model => {
+            this.mobilenetModel = model;
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
+    getModel() {
+        return this.model;
+    }
+
     classifyImage(file) {
-        const prediction = this.model.predict(file.tensor);
+        const prediction = this.mobilenetModel.predict(file.tensor);
         const highestPredictions = this.getHighestPredictions(prediction, 10);     
         console.log(highestPredictions);
 
         return ViewClasses.getViewClassification(highestPredictions);
+    }
+
+    classifyLoadedImages(list) {
+
+        list.forEach(file => {
+            if(!file.tensor){
+                trackPromise(
+                    ImageUtils.loadImage(file).then(image => {
+                        file.tensor = ImageUtils.convertImageToTensor(image);
+                        file.viewPrediction = this.classifyImage(file);
+                        file.isView = file.viewPrediction > 0.5 ? true : false;
+
+                        console.log(file.viewPrediction);
+                    })
+                )
+            }
+        })
+
     }
 
     //returns a map which key is classification name and value is probability
@@ -63,30 +93,36 @@ class AiManager{
     }
 
     trainModelByFileList(files) {
-        this.setModel();
 
-        if(this.isModelUpToDate) {
-            files.forEach(file => {
-                console.log(file.tensor)
-                // ImageUtils.loadImage(image).then(img => {   
-                //     const processedImage = ImageUtils.convertImageToTensor(img);    
-                //     console.log(processedImage.toString())
-                //     console.log(this.model)
-                //     //this.model.trainOnBatch(processedImage, tf.oneHot(tf.tensor1d([1], 'int32'), 1000));
-                // });  
-            })
-        }
+            trackPromise(
+                DatabaseManager.getModel().then(mod => {
+                    this.compileModel(mod)
+
+                    files.forEach(file => { 
+                        mod.trainOnBatch(file.tensor, tf.oneHot(tf.tensor1d([file.isView ? 1 : 0], 'int32'), 2))
+                    })
+                    DatabaseManager.setAiModel(mod)
+                })
+            )
+
     }
 
-    compileModel() {
-        this.model.compile({optimizer: 'adam',
-                            loss: 'meanSquaredError'})
+    compileModel(model) {
+        const optimizer = tf.train.adam();
+        model.compile({
+            optimizer: optimizer,
+            loss: 'categoricalCrossentropy',
+            metrics: ['accuracy'],
+        });
     }
 
-    loadMobilenetModel() { 
+    loadMobilenet() { 
         return tf.loadLayersModel(process.env.REACT_APP_MOBILENET_PATH);
     }
 
 }
 
-export default AiManager;
+const aiManagerInstance = new AiManager();
+Object.seal(aiManagerInstance)
+
+export default aiManagerInstance;

@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import { trackPromise } from 'react-promise-tracker';
 import { usePromiseTracker } from "react-promise-tracker";
 
 import './TrainMe.css';
@@ -16,19 +15,21 @@ import ImageRowContainer from '../../containers/TrainMe/ImageRowContainer/ImageR
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import _ from 'underscore-node'
-import AiManager from '../../utils/AiManager';
-import ImageUtils from '../../utils/ImageUtils';
+import aiManagerInstance from '../../utils/AiManager';
+import ModelBuilder from '../../utils/ModelBuilder';
+
+import * as tf from '@tensorflow/tfjs';
 
 const TrainMe = () => {
     const { promiseInProgress } = usePromiseTracker();
 
-    const [aiManager, setAiManager] = useState(new AiManager())
+    const [aiManager, setAiManager] = useState(aiManagerInstance)
 
     const [showUploadImageDialog, setShowUploadImageDialog] = useState(false);
-    const [isImageUploaded, setIsImageUploaded] = useState(false);
+    const [showThankYouDialog, setShowThankYouDialog] = useState(false);
+    const [isAnyImageUploaded, setIsAnyImageUploaded] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [areAllImagesViews, setAreAllImagesViews] = useState(true);
-    const [lastPrediction, setLastPrediction] = useState(0);
 
     const [filesList, setFilesList] = useState(new Array());
 
@@ -50,15 +51,13 @@ const TrainMe = () => {
     }
 
     const trainMeClickedHandler = () => {
-        if(!isImageUploaded){
+        if(!isAnyImageUploaded){
             setShowUploadImageDialog(true);
         }else{
-            //train
-            setIsLoading(true)
-            aiManager.classifyImage(filesList[0])
-
             aiManager.trainModelByFileList(filesList)
-            setIsLoading(false)
+            setFilesList([]);
+            setIsAnyImageUploaded(false);
+            setShowThankYouDialog(true);
         }
     }
 
@@ -70,21 +69,7 @@ const TrainMe = () => {
       
     //if new file is added it is assumed it is a view and its tensor is set
     useEffect(() => {
-
-        filesList.forEach(file => {
-            if(!file.tensor){
-                trackPromise(
-                    ImageUtils.loadImage(file).then(image => {
-                        file.tensor = ImageUtils.convertImageToTensor(image);
-                        file.viewPrediction = aiManager.classifyImage(file);
-                        file.isView = file.viewPrediction > 0.5 ? true : false;
-                        setLastPrediction(file.viewPrediction)
-                        console.log(file.viewPrediction);
-                    })
-                )
-            }
-        })
-   
+        aiManager.classifyLoadedImages(filesList)
     }, [filesList])
 
     useEffect(() => {
@@ -104,13 +89,13 @@ const TrainMe = () => {
         imgsArray.splice(key, 1);
         setFilesList([...imgsArray]);
         if(filesList.length < 1){
-            setIsImageUploaded(false);
+            setIsAnyImageUploaded(false);
         }
     }
 
     const handleRemoveAllImagesClick = () => {
         setFilesList([]);
-        setIsImageUploaded(false);
+        setIsAnyImageUploaded(false);
     }
 
     //change all images view value
@@ -141,7 +126,7 @@ const TrainMe = () => {
 
         setFilesList(_.uniq([...together], file => file.name));
 
-        setIsImageUploaded(true)
+        setIsAnyImageUploaded(true)
     }
 
     function buildImageSelector(){
@@ -157,9 +142,17 @@ const TrainMe = () => {
         setShowUploadImageDialog(false);
     }
 
-    const alertDialog = <AlertDialog 
+    const closeThankYouDialogHandler = () => {
+        setShowThankYouDialog(false);
+    }
+
+    const uploadImageDialog = <AlertDialog 
                             open={showUploadImageDialog} 
                             closed={closeUploadImageDialogHandler}>Please upload image(s) first.</AlertDialog>
+
+    const thankYouDialog = <AlertDialog 
+                                open={showThankYouDialog} 
+                                closed={closeThankYouDialogHandler}><p><strong>Success!</strong></p> Thank you very much for making AIcasso better!</AlertDialog>
 
     return(
         <div>
@@ -182,7 +175,8 @@ const TrainMe = () => {
                                            buttonDisabled={isLoading}/>
                 </div>
 
-                {showUploadImageDialog ? alertDialog : null}
+                {showUploadImageDialog ? uploadImageDialog : null}
+                {showThankYouDialog ? thankYouDialog : null}
 
                 <Button buttonWidth={buttonWidth}
                         clicked={handleImageSelect} 
