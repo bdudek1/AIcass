@@ -35,6 +35,7 @@ class ModelBuilder {
         model.add(tf.layers.flatten());
       
         const NUM_OUTPUT_CLASSES = 2;
+        
         model.add(tf.layers.dense({
           units: NUM_OUTPUT_CLASSES,
           kernelInitializer: 'varianceScaling',

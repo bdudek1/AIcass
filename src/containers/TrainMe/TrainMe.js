@@ -16,14 +16,11 @@ import ImageRowContainer from '../../containers/TrainMe/ImageRowContainer/ImageR
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import _ from 'underscore-node'
 import aiManagerInstance from '../../utils/AiManager';
-import ModelBuilder from '../../utils/ModelBuilder';
-
-import * as tf from '@tensorflow/tfjs';
 
 const TrainMe = () => {
     const { promiseInProgress } = usePromiseTracker();
 
-    const [aiManager, setAiManager] = useState(aiManagerInstance)
+    const aiManager = aiManagerInstance
 
     const [showUploadImageDialog, setShowUploadImageDialog] = useState(false);
     const [showThankYouDialog, setShowThankYouDialog] = useState(false);
@@ -54,10 +51,12 @@ const TrainMe = () => {
         if(!isAnyImageUploaded){
             setShowUploadImageDialog(true);
         }else{
-            aiManager.trainModelByFileList(filesList)
+            aiManager.trainModelByFileList(filesList, setShowThankYouDialog)
+
             setFilesList([]);
+
             setIsAnyImageUploaded(false);
-            setShowThankYouDialog(true);
+            //setShowThankYouDialog(true);
         }
     }
 
@@ -91,6 +90,7 @@ const TrainMe = () => {
         if(filesList.length < 1){
             setIsAnyImageUploaded(false);
         }
+
     }
 
     const handleRemoveAllImagesClick = () => {

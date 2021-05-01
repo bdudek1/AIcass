@@ -7,6 +7,7 @@ import DatabaseManager from './DatabaseManager';
 import labels from './imagenet_labels.json';
 
 import * as tf from '@tensorflow/tfjs';
+import * as tfvis from '@tensorflow/tfjs-vis';
 
 class AiManager{
     model = undefined;
@@ -92,20 +93,54 @@ class AiManager{
         return maxValues;
     }
 
-    trainModelByFileList(files) {
+    async trainModelByFileList(files, showDialog) {
+
         tf.tidy(() => {
             trackPromise(
                 DatabaseManager.getModel().then(mod => {
                     this.compileModel(mod)
 
+                    const data = [];
+                    const labels = [];
+
                     files.forEach(file => { 
-                        mod.trainOnBatch(file.tensor, tf.oneHot(tf.tensor1d([file.isView ? 1 : 0], 'int32'), 2))
+                        data.push(tf.squeeze(file.tensor))
+                        labels.push(tf.squeeze(tf.oneHot(tf.tensor1d([file.isView ? 1 : 0], 'int32'), 2)))
                     })
-                    DatabaseManager.setAiModel(mod)
+
+                    mod.fit(tf.stack(data), tf.stack(labels), {
+                        epochs: 1,
+                        batchSize: 1,
+                        callbacks: this.createTfVisCallback(data.length)
+                   }).then((a) => {
+                       DatabaseManager.setAiModel(mod)
+                       showDialog(true)
+                   })
+
                 })
             )
         })
+
     }
+
+    createTfVisCallback(size) {
+        const metrics = ['acc'];
+        const container = {
+          name: `AIcasso - training on ${size} images`, styles: { height: '330px' }
+        };
+        const options = {xLabel: "Image number",
+                         yLabel: "1 - View | 0 - Not View",
+                         yType: "nominal",
+                         xType: "nominal",
+                         zoomToFit: true,
+                         seriesColors: ["#33B7EE"],
+                         callbacks:["onBatchEnd"]}
+        
+        const fitCallbacks = tfvis.show.fitCallbacks(container, metrics, options)
+
+        return fitCallbacks
+    }
+    
 
     compileModel(model) {
         tf.tidy(() => {
