@@ -54,9 +54,7 @@ const TrainMe = () => {
             aiManager.trainModelByFileList(filesList, setShowThankYouDialog)
 
             setFilesList([]);
-
             setIsAnyImageUploaded(false);
-            //setShowThankYouDialog(true);
         }
     }
 

@@ -94,7 +94,7 @@ class AiManager{
     }
 
     async trainModelByFileList(files, showDialog) {
-
+        //setIsTraining(true)
         tf.tidy(() => {
             trackPromise(
                 DatabaseManager.getModel().then(mod => {
@@ -107,15 +107,18 @@ class AiManager{
                         data.push(tf.squeeze(file.tensor))
                         labels.push(tf.squeeze(tf.oneHot(tf.tensor1d([file.isView ? 1 : 0], 'int32'), 2)))
                     })
-
-                    mod.fit(tf.stack(data), tf.stack(labels), {
-                        epochs: 1,
-                        batchSize: 1,
-                        callbacks: this.createTfVisCallback(data.length)
-                   }).then((a) => {
-                       DatabaseManager.setAiModel(mod)
-                       showDialog(true)
-                   })
+                    
+                    trackPromise(
+                        mod.fit(tf.stack(data), tf.stack(labels), {
+                            epochs: 1,
+                            batchSize: 1,
+                            callbacks: this.createTfVisCallback(data.length)
+                        }).then((a) => {
+                            DatabaseManager.setAiModel(mod)
+                            //setIsTraining(false)
+                            showDialog(true)
+                        })
+                    )
 
                 })
             )
