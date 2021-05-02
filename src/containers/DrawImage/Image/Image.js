@@ -43,37 +43,28 @@ const Image = (props) => {
                                 closed={props.closeDialog}>Please draw image first.</AlertDialog>
 return(
         <div className="Image">
-        <img
-            style={{width: "100%",margin: "auto"}}
-            src={placeholder} 
-            alt="AIcasso"></img>
+            <img
+                style={{width: "100%",margin: "auto"}}
+                src={placeholder} 
+                alt="AIcasso"></img>
 
-        <div style={{display: "flex", flexDirection: "column"}}
-             data-tip="Only 3$!">
+            <div style={{display: "flex", flexDirection: "column"}}
+                data-tip="Only 3$!">
 
-                {props.isDrawn ? buyNftButton : null}
-                <ReactTooltip 
-                backgroundColor="#33B7EE"
-                borderColor="#B637F1"
-                border="true" />
+                    {props.isDrawn ? buyNftButton : null}
+                    
+                    <ReactTooltip 
+                        backgroundColor="#33B7EE"
+                        borderColor="#B637F1"
+                        border="true" />
+            </div>
+
+            {props.disabled ? <Spinner isShown={props.disabled} /> : null}
+
+            <div>{props.showDialog ? drawImageDialog : null}</div>
+
         </div>
-
-        {props.disabled ? <Spinner isShown={props.disabled} /> : null}
-        <p className="TextStyle">Is that image a view?</p>  
-        <div>{props.showDialog ? drawImageDialog : null}</div>
-
-        <Button buttonWidth={buttonWidth} clicked={props.clicked} disabled={props.disabled}>
-            <CheckIcon style={{fontSize: iconSize, marginBottom:"-4px"}}/>
-            <span style={{marginLeft: "3px"}}>Yes</span>
-        </Button>
-        <Button buttonWidth={buttonWidth} clicked={props.clicked} disabled={props.disabled}>
-            <CloseIcon style={{fontSize: iconSize, marginBottom:"-4px"}}/>
-            <span style={{marginLeft: "3px"}}>No</span>
-        </Button>
-
-    </div>
-)
-
+    )
 
 };
 

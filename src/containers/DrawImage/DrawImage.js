@@ -12,7 +12,7 @@ import AlertDialog from '../../components/AlertDialog/AlertDialog';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
-const DrawImage = (props) => {
+const DrawImage = () => {
     const { promiseInProgress } = usePromiseTracker();
 
     const [isLoading, setIsLoading] = useState(false);

@@ -3,16 +3,11 @@ import React, { Component, Fragment } from 'react';
 import './Layout.css';
 import Toolbar from '../../components/Navigaton/Toolbar/Toolbar';
 import SideDrawer from '../../components/Navigaton/SideDrawer/SideDrawer';
-import DatabaseManager from '../../utils/DatabaseManager';
 
 class Layout extends Component {
     state = {
         showSideDrawer: false,
         showAlertDialog: false
-    }
-
-    componentDidMount() {
-        DatabaseManager.tryToInitDatabase()
     }
 
     sideDrawerClosedHandler = () => {

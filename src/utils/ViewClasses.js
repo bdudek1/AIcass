@@ -1,5 +1,3 @@
-
-
 class ViewClasses {
 
     //returns mobilenet classes related to views

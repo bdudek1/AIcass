@@ -11,25 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.css-1y0q4l9 {
-  display: none !important;
-}
-
-.css-gqudy6, .css-gv2tcx {
-  border-bottom: 1px solid #B637F1 !important;
-}
-
-.css-gv2tcx:hover {
-  color: #33B7EE !important
-}
-
-
-@media (max-width: 551px){
-  .css-1dwmjn {
-    width: 100% !important;
-  }
-  .css-f4h7u8 {
-    width: 100% !important;
-  }
-}

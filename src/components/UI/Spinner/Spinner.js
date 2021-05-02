@@ -13,10 +13,6 @@ const Spinner = () => {
 
     useEffect(() => {
         randomBinaryChangeInterval = setInterval(() => setRandomBinary(StringUtils.generateRandomBinaryString(8)), 80);
-    })
-
-    useEffect(() => {
-        clearInterval(randomBinaryChangeInterval);
     }, [])
 
     return (

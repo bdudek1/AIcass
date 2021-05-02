@@ -1,6 +1,8 @@
 import * as tf from '@tensorflow/tfjs';
 
 class ImageUtils{
+    static IMAGE_HEIGHT = 224;
+    static IMAGE_WIDTH = 224;
 
     static loadImage(src) {  
         return new Promise((resolve, reject) => { 
@@ -36,7 +38,7 @@ class ImageUtils{
     }
 
     static resizeImageTensor(image) {
-        return tf.image.resizeBilinear(image, [224, 224]);
+        return tf.image.resizeBilinear(image, [this.IMAGE_HEIGHT, this.IMAGE_WIDTH]);
     }
 
     static batchImageTensor(image) {

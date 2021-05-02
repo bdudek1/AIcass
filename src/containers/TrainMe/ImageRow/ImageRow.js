@@ -44,7 +44,7 @@ const ImageRow = (props) => {
                     <BackspaceIcon className="HidingIcon"/>
                 </span> 
                 <MarkViewButton id={props.item}
-                                clicked={() => (props.viewClick(props.item))}
+                                //clicked={() => (props.viewClick(props.item))}
                                 view={isView}
                                 viewPrediction={props.viewPrediction}/> 
             </div>
