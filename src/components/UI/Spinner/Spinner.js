@@ -16,7 +16,8 @@ const Spinner = () => {
     }, [])
 
     return (
-        promiseInProgress &&
+        //disabled spinner in promiseInProgress
+        // promiseInProgress &&
         <div className="book">
             <div className="book__page"></div>
             <div style={{fontSize: "x-small", color: "black", marginTop: "32px"}}>

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { usePromiseTracker } from "react-promise-tracker";
 
-import './TrainMe.css';
+import './IdentifyImages.css';
 import '../../components/UI/Button/Button.css'
 import '../../global_styles/styles.css'
 
@@ -98,10 +98,7 @@ const IdentifyImages = () => {
                     <text>Upload image(s) to identify if they are a view and which type of view.</text>
                 </div>
 
-                <div style={{marginTop:"0.75em"}}>
-
-                        {isLoading ? <Spinner/> : null}
-                        
+                <div style={{marginTop:"0.75em"}}>        
                         <ImageRowContainer items={filesList} 
                                            remove={handleRemoveImageClick}
                                            removeAll={handleRemoveAllImagesClick}

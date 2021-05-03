@@ -12,7 +12,8 @@ import App from './App';
 const app = (
     <BrowserRouter>
         <App />
-        <Spinner />
+        {/* Disabled spinner on trackPromise */}
+        {/* <Spinner /> */}
     </BrowserRouter>
 )
 

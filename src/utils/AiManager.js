@@ -56,7 +56,6 @@ class AiManager{
                             const prediction = this.getPrediction(file)
                             file.viewPrediction = this.classifyImage(prediction);
                             file.highestPrediction = this.getHighestClassification(prediction)
-                            file.isView = file.viewPrediction > 0.5 ? true : false;
                         })
                     )
                 }
