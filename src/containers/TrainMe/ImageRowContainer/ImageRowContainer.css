@@ -20,18 +20,15 @@
         height: 200px;
         padding: 15px;
         border-radius: 5px;
-        border-style: groove;
-        border-color: #3336ee;
         width: 95%;
         margin: auto;
         align-content: center;
         overflow: auto;
-        box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
         transition: 0.15s ease-in-out all;
 }
 
 .ImageRowDisplay > div {
-    display:table-row;
+    display: flex;
 }
 
 @media (max-width: 768px){

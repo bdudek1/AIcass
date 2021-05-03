@@ -1,53 +1,53 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import './ImageRow.css'
 
-import BackspaceIcon from '@material-ui/icons/Backspace';
-import MarkViewButton from '../../../components/UI/Button/MarkViewButton/MarkViewButton';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
 
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const ImageRow = (props) => {
-    const isMobile = useMediaQuery('(max-width:768px)')
-    const isSmallMobile = useMediaQuery('(max-width:500px)')
-    const isVerySmallMobile = useMediaQuery('(max-width:400px)')
-    const isExtremelySmallMobile = useMediaQuery('(max-width:300px)')
+    const predictionText = `The image is in ${parseFloat(props.file.viewPrediction*100).toFixed(2)}% a view`
+    const highestPredictionText = props.file.highestPrediction ? 
+    `The image is ${props.file.highestPrediction.name} in ${parseFloat(props.file.highestPrediction.value*100).toFixed(2)}%` : null
 
-    const [isView, setIsView] = useState(false);
+    let imgNameDisplayText = props.file.name
+    let imgNameLength = props.file.name.length;
 
-    useEffect(() => {
-        setIsView(props.isView)
-    }, [props.isView])
-
-    let imgNameDisplayText = props.item;
-    let imgNameLength = props.item.length;
-
-    if(imgNameLength > 30){
-        imgNameDisplayText = imgNameDisplayText.substring(0, 22) + "..."
-    }
-    if(isMobile && imgNameLength > 24){
-        imgNameDisplayText = imgNameDisplayText.substring(0, 22) + "..."
-    }
-    if(isSmallMobile && imgNameLength > 19){
-        imgNameDisplayText = imgNameDisplayText.substring(0, 17) + "..."
-    }
-    if(isVerySmallMobile && imgNameLength > 8){
-        imgNameDisplayText = imgNameDisplayText.substring(0, 6) + "..."
-    }
-    if(isExtremelySmallMobile && imgNameLength > 6){
-        imgNameDisplayText = imgNameDisplayText.substring(0, 4) + "..."
+    if(imgNameLength > 13){
+        imgNameDisplayText = imgNameDisplayText.substring(0, 11) + "..."
     }
 
     return(
-            <div onClick={props.click} className="ImageRow">
-                <span style={{padding: "3px 10px"}} >{imgNameDisplayText}
-                    <BackspaceIcon className="HidingIcon"/>
-                </span> 
-                <MarkViewButton id={props.item}
-                                //clicked={() => (props.viewClick(props.item))}
-                                view={isView}
-                                viewPrediction={props.viewPrediction}/> 
-            </div>
+            <Card className="ImageRow" style={{position:"relative"}}>
+                <CardContent className="CardContent">
+                    <div className="CardDetails">
+                        <CardMedia
+                            component="img"
+                            image={props.file.image ? props.file.image.src : null}
+                            title={imgNameDisplayText}
+                            className="CardImg"/>
+                        <Typography variant="subtitle2">
+                            {imgNameDisplayText}
+                        </Typography>
+                    </div>
+
+                        <div className="CardDetails">
+                            <Typography component="h7" variant="h7" className="CardText">
+                                {predictionText}
+                            </Typography>
+                            <Typography variant="subtitle2" color="textSecondary" style={{marginTop: "5px"}}>
+                                {highestPredictionText}
+                            </Typography>
+                        </div>
+                        <div className="CardDetails">
+                            <CloseIcon onClick={props.remove} className="CardClose"/>  
+                        </div>
+                </CardContent>
+          </Card>
     )
 }
 

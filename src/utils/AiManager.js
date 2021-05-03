@@ -21,10 +21,21 @@ class AiManager{
         })
     }
 
-    classifyImage(file) {
-        const prediction = this.mobilenetModel.predict(file.tensor);
+    getPrediction(file) {
+        return this.mobilenetModel.predict(file.tensor);
+    }
+
+    getHighestClassification(prediction) {
+        const highestPrediction = this.getHighestPredictions(prediction, 1);     
+        const highestPredictionArray = Array.from(highestPrediction, ([name, value]) => ({ name, value }));
+
+        console.log(highestPredictionArray[0].name)
+        return {name: highestPredictionArray[0].name, value: highestPredictionArray[0].value}
+    }
+
+    classifyImage(prediction) {
         const highestPredictions = this.getHighestPredictions(prediction, 10);     
-        console.log(highestPredictions)
+
         return ViewClasses.getViewClassification(highestPredictions);
     }
 
@@ -39,8 +50,12 @@ class AiManager{
                 if(!file.tensor){
                     trackPromise(
                         ImageUtils.loadImage(file).then(image => {
+                            file.image = image
                             file.tensor = ImageUtils.convertImageToTensor(image);
-                            file.viewPrediction = this.classifyImage(file);
+
+                            const prediction = this.getPrediction(file)
+                            file.viewPrediction = this.classifyImage(prediction);
+                            file.highestPrediction = this.getHighestClassification(prediction)
                             file.isView = file.viewPrediction > 0.5 ? true : false;
                         })
                     )

@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import './ImageRowContainer.css';
 import ImageRow from '../ImageRow/ImageRow';
 import Button from '../../../components/UI/Button/Button'
 
-const imageRowContainer = (props) => {
+const ImageRowContainer = (props) => {
+
     return(
         <div className="ImageRowContainer">    
             <div className="ImageRowDisplay">
                 {props.items.map((item, index) => (
                     <ImageRow 
                         key={index} 
-                        item={item.name} 
-                        isView={item.isView}
-                        viewPrediction={item.viewPrediction}
-                        click={() => props.clicked(index)}
+                        file={item}
+                        remove={() => props.remove(index)}
                         viewClick={() => props.changeIsView(index)} />))}
             </div>  
                 <Button 
@@ -25,4 +24,4 @@ const imageRowContainer = (props) => {
 
 }
 
-export default imageRowContainer
+export default ImageRowContainer

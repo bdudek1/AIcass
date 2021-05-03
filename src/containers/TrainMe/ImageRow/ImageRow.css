@@ -1,10 +1,7 @@
 .ImageRow{
     text-align: left;
     font-size: 16px;
-    border-radius: 30px;
-    color: rgb(87, 87, 87, 0.9);
-    transition: 0.3s;
-    margin: 1px;
+    margin: 3px;
 }
 
 .HidingIcon{
@@ -16,8 +13,6 @@
 
 .ImageRow:hover{
     box-shadow: 5px 2px 10px -2px rgb(87, 87, 87, 0.66);
-    color: #3336ee !important;
-    cursor: pointer;
 }
 
 .ImageRowTooltip{
@@ -26,4 +21,33 @@
     -ms-flex-pack: center;
 }
 
+.CardImg {
+    width: 100px !important;
+}
 
+.CardText {
+    margin: auto;
+    text-align: left;
+}
+
+.CardContent {
+    display: flex;
+}
+
+.CardDetails {
+    display: flex;
+    flex-direction: column;
+    padding-left: 12px;
+}
+
+.CardClose {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    color:rgb(87, 87, 87, 0.33);
+}
+
+.CardClose:hover {
+    color:rgb(87, 87, 87, 0.66);
+    cursor: pointer;
+}

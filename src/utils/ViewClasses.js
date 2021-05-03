@@ -40,6 +40,7 @@ class ViewClasses {
 
         return viewProbability;
     }
+
 }
 
 export default ViewClasses;

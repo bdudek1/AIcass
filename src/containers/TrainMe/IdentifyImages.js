@@ -6,17 +6,15 @@ import '../../components/UI/Button/Button.css'
 import '../../global_styles/styles.css'
 
 import Button from '../../components/UI/Button/Button';
-import Switch from '../../components/UI/Switch/Switch';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
-import AlertDialog from '../../components/AlertDialog/AlertDialog';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import ImageRowContainer from '../../containers/TrainMe/ImageRowContainer/ImageRowContainer';
+import ImageRowContainer from './ImageRowContainer/ImageRowContainer';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import _ from 'underscore-node'
 import aiManagerInstance from '../../utils/AiManager';
 
-const TrainMe = () => {
+const IdentifyImages = () => {
     const { promiseInProgress } = usePromiseTracker();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -97,17 +95,15 @@ const TrainMe = () => {
         <div>
             <div className="TrainMe">
                 <div className="TextStyle">
-                    <text>Upload image(s) and mark them as views or non-views.
-                          By doing that you're making me even better in painting views for you! The more images the better I will get!</text>
+                    <text>Upload image(s) to identify if they are a view and which type of view.</text>
                 </div>
 
                 <div style={{marginTop:"0.75em"}}>
-                        <p className="TextStyle"><strong>My all images are</strong></p>
 
                         {isLoading ? <Spinner/> : null}
                         
                         <ImageRowContainer items={filesList} 
-                                           clicked={handleRemoveImageClick}
+                                           remove={handleRemoveImageClick}
                                            removeAll={handleRemoveAllImagesClick}
                                            buttonDisabled={isLoading}/>
                 </div>
@@ -124,4 +120,4 @@ const TrainMe = () => {
     );
 };
 
-export default TrainMe;
+export default IdentifyImages;
