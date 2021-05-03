@@ -17,8 +17,8 @@ const ImageRow = (props) => {
     let imgNameDisplayText = props.file.name
     let imgNameLength = props.file.name.length;
 
-    if(imgNameLength > 13){
-        imgNameDisplayText = imgNameDisplayText.substring(0, 11) + "..."
+    if(imgNameLength > 12){
+        imgNameDisplayText = imgNameDisplayText.substring(0, 10) + "..."
     }
 
     return(
@@ -30,7 +30,7 @@ const ImageRow = (props) => {
                             image={props.file.image ? props.file.image.src : null}
                             title={imgNameDisplayText}
                             className="CardImg"/>
-                        <Typography variant="subtitle2">
+                        <Typography component="h7" variant="h7">
                             {imgNameDisplayText}
                         </Typography>
                     </div>
@@ -39,7 +39,7 @@ const ImageRow = (props) => {
                             <Typography component="h7" variant="h7" className="CardText">
                                 {predictionText}
                             </Typography>
-                            <Typography variant="subtitle2" color="textSecondary" style={{marginTop: "5px"}}>
+                            <Typography component="h7" variant="h7" color="textSecondary" style={{marginTop: "5px"}}>
                                 {highestPredictionText}
                             </Typography>
                         </div>
