@@ -2,7 +2,7 @@ import React from 'react';
 
 import './ImageRowContainer.css';
 import ImageRow from '../ImageRow/ImageRow';
-import Button from '../../../components/UI/Button/Button'
+import Button from '../../../components/UI/Button/Button';
 
 const ImageRowContainer = (props) => {
 

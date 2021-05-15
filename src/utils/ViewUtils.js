@@ -41,11 +41,11 @@ class ViewClasses {
         return viewProbability;
     }
 
-    static compareViews(a, b) {
-        if (a.viewPrediction > b.viewPrediction) {
+    static compareViews(firstImage, secondImage) {
+        if (firstImage.viewPrediction > secondImage.viewPrediction) {
           return -1;
         }
-        if (a.viewPrediction < b.viewPrediction) {
+        if (firstImage.viewPrediction < secondImage.viewPrediction) {
           return 1;
         }
 

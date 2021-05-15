@@ -1,5 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import { trackPromise } from 'react-promise-tracker';
+
+import Jimp from 'jimp';
+
+import placeholder from '../../assets/images/placeholder.png';
+
 import { usePromiseTracker } from "react-promise-tracker";
 
 import './DrawImage.css';
@@ -11,8 +15,11 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import AlertDialog from '../../components/AlertDialog/AlertDialog';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import ChimpanzeeWithBrush from '../../ChimpanzeeWithBrush';
 
 const DrawImage = () => {
+    const [image, setImage] = useState(placeholder)
+
     const { promiseInProgress } = usePromiseTracker();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -41,7 +48,14 @@ const DrawImage = () => {
     }, [promiseInProgress])
         
     const drawImageClickHandler = () => {
-
+        const chimpanzee = new ChimpanzeeWithBrush();
+        chimpanzee.build().then(image => {
+            chimpanzee.setImage(image)
+            chimpanzee.getImage().getBase64Async(Jimp.AUTO).then(img => {
+                console.log(img)
+                setImage(img)
+            })
+        })
     }
 
     const closeAlertDialogHandler = () => {
@@ -66,7 +80,8 @@ const DrawImage = () => {
                    clicked={downloadClickHandler}
                    showDialog={showDrawImageDialog}
                    closeDialog={closeAlertDialogHandler}
-                   isDrawn={isImageDrawn}/>
+                   isDrawn={isImageDrawn}
+                   image={image}/>
             <Button buttonWidth={buttonWidth}
                     clicked={drawImageClickHandler} 
                     disabled={isLoading}>

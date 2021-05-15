@@ -4,12 +4,8 @@ import ReactTooltip from 'react-tooltip';
 import './Image.css';
 import '../../../global_styles/styles.css'
 
-import CheckIcon from '@material-ui/icons/Check';
-import CloseIcon from '@material-ui/icons/Close';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import AlertDialog from '../../../components/AlertDialog/AlertDialog';
-import placeholder from '../../../assets/images/placeholder.png';
-import Button from '../../../components/UI/Button/Button';
 import  '../../../components/UI/Button/MarkViewButton/MarkViewButton.css';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -45,7 +41,7 @@ return(
         <div className="Image">
             <img
                 style={{width: "100%",margin: "auto"}}
-                src={placeholder} 
+                src={props.image} 
                 alt="AIcasso"></img>
 
             <div style={{display: "flex", flexDirection: "column"}}
