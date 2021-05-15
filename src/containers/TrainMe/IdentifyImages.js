@@ -7,7 +7,6 @@ import '../../global_styles/styles.css'
 
 import Button from '../../components/UI/Button/Button';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
-import Spinner from '../../components/UI/Spinner/Spinner';
 import ImageRowContainer from './ImageRowContainer/ImageRowContainer';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
