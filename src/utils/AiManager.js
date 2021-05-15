@@ -1,7 +1,7 @@
 import { trackPromise } from 'react-promise-tracker';
 
 import ImageUtils from './ImageUtils';
-import ViewClasses from './ViewClasses';
+import ViewUtils from './ViewUtils';
 
 import labels from './imagenet_labels.json';
 
@@ -36,7 +36,7 @@ class AiManager{
     classifyImage(prediction) {
         const highestPredictions = this.getHighestPredictions(prediction, 10);     
 
-        return ViewClasses.getViewClassification(highestPredictions);
+        return ViewUtils.getViewClassification(highestPredictions);
     }
 
     async classifyLoadedImages(list) {
@@ -56,11 +56,16 @@ class AiManager{
                             const prediction = this.getPrediction(file)
                             file.viewPrediction = this.classifyImage(prediction);
                             file.highestPrediction = this.getHighestClassification(prediction)
+                        }).then(() => {
+                            
+                            //if the list does not anymore contain undefined views then sort it by it
+                            if(!list.find(item => item.viewPrediction === undefined)){
+                                list.sort((a, b) => ViewUtils.compareViews(a, b))
+                            }
                         })
                     )
                 }
             })
-
         })
     }
 

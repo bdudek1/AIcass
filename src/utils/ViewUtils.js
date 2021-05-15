@@ -41,6 +41,17 @@ class ViewClasses {
         return viewProbability;
     }
 
+    static compareViews(a, b) {
+        if (a.viewPrediction > b.viewPrediction) {
+          return -1;
+        }
+        if (a.viewPrediction < b.viewPrediction) {
+          return 1;
+        }
+
+        return 0;
+      }
+
 }
 
 export default ViewClasses;
