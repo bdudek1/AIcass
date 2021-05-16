@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react'
 
-import Jimp from 'jimp';
-
 import placeholder from '../../assets/images/placeholder.png';
 
 import { usePromiseTracker } from "react-promise-tracker";
 
 import './DrawImage.css';
+
+import Point from './../../utils/Point'
 
 import Button from '../../components/UI/Button/Button';
 import Image from './Image/Image';
@@ -51,8 +51,12 @@ const DrawImage = () => {
         const chimpanzee = new ChimpanzeeWithBrush();
         chimpanzee.build().then(image => {
             chimpanzee.setImage(image)
-            chimpanzee.getImage().getBase64Async(Jimp.AUTO).then(img => {
-                console.log(img)
+            chimpanzee.drawLeaningEllipse(40, 120, new Point(300, 150), 60, 50)
+            chimpanzee.drawLeaningEllipse(40, 120, new Point(150, 150), 45, 50)
+            chimpanzee.drawLeaningEllipse(40, 120, new Point(400, 250), 30, 50)
+            chimpanzee.drawLeaningEllipse(40, 120, new Point(450, 150), 90, 50)
+            chimpanzee.drawRandomPixels(5000)
+            chimpanzee.getBase64Image().then(img => {
                 setImage(img)
             })
         })
