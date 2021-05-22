@@ -90,7 +90,7 @@ class AiManager{
          })
     }
 
-        //returns a map which key is classification name and value is probability
+    //returns a map which key is classification name and value is probability
     getHighestPredictions(prediction, predictionsNumber) {
         const predictionValues = prediction.as1D()
                                             .dataSync()

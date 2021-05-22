@@ -32,6 +32,14 @@ const Image = (props) => {
     const isSmallMobile = useMediaQuery('(max-width:500px)')
 
     useEffect(() => {
+        handleIsDrawingChange()
+    }, [props.isDrawing])
+
+    const handleNftClick = () => {
+        
+    }
+
+    const handleIsDrawingChange = () => {
         if(props.isDrawing){
             setStopColor("secondary")
             setStopText("STOP")
@@ -42,10 +50,6 @@ const Image = (props) => {
             setStopText("CONTINUE")
             props.setIsDrawn(true)
         }
-    }, [props.isDrawing])
-
-    const handleNftClick = () => {
-        
     }
 
     const handleStopClick = () => {
