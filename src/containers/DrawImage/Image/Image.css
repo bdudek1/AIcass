@@ -5,15 +5,28 @@
     border-radius: 5px;
     box-shadow: none;
     width: 90%;
-    max-width: 400px;
+    max-width: 410px;
     margin: auto;
     align-content: center;
     transition: 0.3s ease-in-out all;
+    display:inline-flexbox;
 }
 
 .Image:hover {
-        border-radius: 17px;
-        box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
+}
+
+.RefreshIcon {
+    z-index: 10000000;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    color:rgb(87, 87, 87, 0.33);
+}
+
+.RefreshIcon:hover {
+        color:rgb(87, 87, 87, 0.66);
+        cursor: pointer;
 }
 
 @media (max-width: 768px){
@@ -22,9 +35,6 @@
         padding-top: 20px;
         width: 92%
 	}
-        .Image:hover {
-                border-radius: 13px;
-        }
 }
 
 @media (max-width: 500px){

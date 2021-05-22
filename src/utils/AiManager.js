@@ -25,6 +25,10 @@ class AiManager{
         return this.mobilenetModel.predict(file.tensor);
     }
 
+    getPredictionByTensor(tensor){
+        return this.mobilenetModel.predict(tensor);
+    }
+
     getHighestClassification(prediction) {
         const highestPrediction = this.getHighestPredictions(prediction, 1);     
         const highestPredictionArray = Array.from(highestPrediction, ([name, value]) => ({ name, value }));
@@ -33,7 +37,7 @@ class AiManager{
         return {name: highestPredictionArray[0].name, value: highestPredictionArray[0].value}
     }
 
-    classifyImage(prediction) {
+    classifyPrediction(prediction) {
         const highestPredictions = this.getHighestPredictions(prediction, 10);     
 
         return ViewUtils.getViewClassification(highestPredictions);
@@ -54,7 +58,7 @@ class AiManager{
                             file.tensor = ImageUtils.convertImageToTensor(image);
 
                             const prediction = this.getPrediction(file)
-                            file.viewPrediction = this.classifyImage(prediction);
+                            file.viewPrediction = this.classifyPrediction(prediction);
                             file.highestPrediction = this.getHighestClassification(prediction)
                         }).then(() => {
                             
@@ -67,6 +71,23 @@ class AiManager{
                 }
             })
         })
+    }
+
+    async classifyDrawnImage(image) {
+        if(!this.mobilenetModel){
+            await this.loadMobilenetModel()
+         }
+
+         return new Promise(resolve => {
+             tf.tidy(() => {
+                ImageUtils.loadImage(new Blob([image.buffer], { type: 'image/png' })).then(img => {
+                    const tensor = ImageUtils.convertImageToTensor(img)
+
+                    const viewPrediction = this.getPredictionByTensor(tensor)
+                    resolve(this.classifyPrediction(viewPrediction))
+                })
+            })
+         })
     }
 
         //returns a map which key is classification name and value is probability

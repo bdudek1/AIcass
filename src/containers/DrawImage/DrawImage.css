@@ -2,7 +2,7 @@
     align-items: center;
     text-align: center;
     border-radius: 10px;
-    box-shadow: rgb(51, 183, 238, 0.5) 3px 3px 6px 0px inset, rgba(200, 200, 200, 0.5) -3px -3px 6px 1px inset;
+    box-shadow: none;
     max-width: 550px;
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -17,7 +17,7 @@
 }
 
 .DrawImage:hover {
-    box-shadow: rgb(200, 200, 200, 0.5) 3px 3px 6px 0px inset, rgba(51, 183, 238, 0.5) -3px -3px 6px 1px inset;
+    box-shadow: rgba(51, 183, 238, 0.5) 3px 3px 6px 0px inset, rgba(51, 183, 238, 0.5) -3px -3px 6px 1px inset;
 }
 
 

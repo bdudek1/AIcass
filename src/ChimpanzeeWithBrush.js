@@ -1,5 +1,6 @@
 import Jimp from 'jimp';
 
+import AiManager from './utils/AiManager'
 import MathUtils from './utils/MathUtils';
 import Point from './utils/Point';
 
@@ -167,6 +168,22 @@ class ChimpanzeeWithBrush {
         return new Promise(resolve => {
             this.getImage().getBase64Async(Jimp.AUTO).then(img => {
                 resolve(img);
+            })
+        })
+    }
+
+    getViewPrediction() {
+        const t1 = performance.now()
+
+        return new Promise(resolve => {
+            this.getImage().getBufferAsync(Jimp.MIME_PNG).then(image => {
+                AiManager.classifyDrawnImage(image).then(classification => {
+                    console.log(classification)
+                    
+                    const t2 = performance.now()
+                    console.log(`CONVERTING IMAGE TO TENSOR AND PREDICTING IF IT IS A VIEW DONE IN ${t2 - t1} [MS]`)
+                    resolve(classification)
+                })
             })
         })
     }
