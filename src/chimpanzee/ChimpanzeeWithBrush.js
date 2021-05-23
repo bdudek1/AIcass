@@ -1,8 +1,8 @@
 import Jimp from 'jimp';
 
-import AiManager from './utils/AiManager'
-import MathUtils from './utils/MathUtils';
-import Point from './utils/Point';
+import AiManager from '../utils/AiManager'
+import MathUtils from '../utils/MathUtils';
+import Point from '../utils/Point';
 
 class ChimpanzeeWithBrush {
     IMAGE_TENSOR_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_TENSOR_HEIGHT)
@@ -10,8 +10,6 @@ class ChimpanzeeWithBrush {
 
     IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
     IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
-
-    BLACK = Jimp.rgbaToInt(0, 0, 0, 255);
 
     image;
     imageTensor;
@@ -35,7 +33,7 @@ class ChimpanzeeWithBrush {
 
     }
 
-    drawRandomPixels(colour, amount) {
+    drawRandomPixels(amount, colour) {
         let i = 0
         while(i < amount){
             const randomX = Math.floor(Math.random() * this.IMAGE_HEIGHT)
@@ -48,27 +46,7 @@ class ChimpanzeeWithBrush {
         }
     }
 
-    drawRandomPixels(amount) {
-        let pixelsDrawn = 0
-
-        while(pixelsDrawn < amount){
-            const randomX = Math.floor(Math.random() * 512)
-            const randomY = Math.floor(Math.random() * 512)
-            const randomPoint = new Point(randomX, randomY)
-
-            const randomR = Math.floor(Math.random() * 255)
-            const randomG = Math.floor(Math.random() * 255)
-            const randomB = Math.floor(Math.random() * 255)
-
-            const randomOpacity =  Math.floor(Math.random() * 255)
-
-            this.drawPixel(Jimp.rgbaToInt(randomR, randomG, randomB, randomOpacity), randomPoint)
-
-            pixelsDrawn++
-        }
-    }
-
-    drawCircle(middlePoint, radius, fillPercentage) {
+    drawCircle(middlePoint, radius, fillPercentage, colour) {
         const amountOfPixels = 3.14*radius*radius*fillPercentage/100;
 
         let pixelsDrawn = 0;
@@ -84,13 +62,13 @@ class ChimpanzeeWithBrush {
                 randomPoint = new Point(randomX, randomY)
             }
 
-            this.drawPixel(this.BLACK, randomPoint)
+            this.drawPixel(colour, randomPoint)
 
             pixelsDrawn++;
         }
     }
 
-    drawEllipse(height, width, middlePoint, fillPercentage) {
+    drawEllipse(height, width, middlePoint, fillPercentage, colour) {
         const amountOfPixels = 3.14*(height/2)*(width/2)*fillPercentage/100;
         
         const distanceBetweenFocals = Math.sqrt(Math.pow(width/2, 2) - Math.pow(height/2, 2))
@@ -112,14 +90,20 @@ class ChimpanzeeWithBrush {
                 randomPoint = new Point(randomX, randomY)
             }
 
-            this.drawPixel(this.BLACK, randomPoint)
+            this.drawPixel(colour, randomPoint)
 
             pixelsDrawn++;
         }
     }
 
-    drawLeaningEllipse(height, width, middlePoint, angle, fillPercentage) {
+    drawLeaningEllipse(height, width, middlePoint, angle, fillPercentage, colour) {
         const amountOfPixels = 3.14*(height/2)*(width/2)*fillPercentage/100;
+
+        if(height > width){
+            const bufHeight = height;
+            height = width;
+            width = bufHeight
+        }
 
         const radiansAngle = angle*3.14/180;
         
@@ -128,25 +112,26 @@ class ChimpanzeeWithBrush {
         const focal1 = new Point(middlePoint.getX() - distanceBetweenFocals*Math.cos(radiansAngle), middlePoint.getY() - distanceBetweenFocals*Math.sin(radiansAngle))
         const focal2 = new Point(middlePoint.getX() + distanceBetweenFocals*Math.cos(radiansAngle), middlePoint.getY() + distanceBetweenFocals*Math.sin(radiansAngle))
 
-        const rectWidth = width*Math.cos(radiansAngle) + height*Math.sin(radiansAngle)
-        const rectHeight = width*Math.sin(radiansAngle) + height*Math.cos(radiansAngle)
+        const rectWidth = width + height
+        const rectHeight = height + width
 
         const maxDistanceToFocals = width
 
         let pixelsDrawn = 0
+
         while(pixelsDrawn < amountOfPixels){
             let randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2+ middlePoint.getX();
             let randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + middlePoint.getY();
             let randomPoint = new Point(randomX, randomY)
 
             //checking if the point is in the ellipse, if not new one generated
-            while(MathUtils.getDistanceToTwoPoints(randomPoint, focal1, focal2) > maxDistanceToFocals){
+            while(MathUtils.getDistanceToTwoPoints(randomPoint, focal1, focal2) > maxDistanceToFocals) {
                 randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2+ middlePoint.getX();
                 randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + middlePoint.getY();
                 randomPoint = new Point(randomX, randomY)
             }
 
-            this.drawPixel(this.BLACK, randomPoint)
+            this.drawPixel(colour, randomPoint)
 
             pixelsDrawn++;
         }
@@ -172,7 +157,7 @@ class ChimpanzeeWithBrush {
         })
     }
 
-    getViewPrediction() {
+    async getViewPrediction() {
         const t1 = performance.now()
 
         return new Promise(resolve => {

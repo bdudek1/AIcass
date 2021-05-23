@@ -11,7 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import AutorenewIcon from '@material-ui/icons/Autorenew';
+import RestorePageIcon from '@material-ui/icons/RestorePage';
 import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -95,7 +95,7 @@ return(
             <div>{props.showDialog ? drawImageDialog : null}</div>
             <Card className="Image">
                 <CardActionArea>
-                <AutorenewIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/>
+                <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/>
                     <CardMedia
                         component="img"
                         height="320"
@@ -119,7 +119,7 @@ return(
                 <Grid container spacing={0}>
                     <Grid item xs={5}>
                         <Typography>
-                            View: {props.viewPrediction} %
+                            View: {props.viewPrediction.toFixed(2)} %
                         </Typography>
                     </Grid>
                     <Grid item xs={2} />
