@@ -14,6 +14,8 @@ class ChimpanzeeWithBrush {
     image;
     imageTensor;
 
+    predictionImageMap = new Map();
+
     constructor() {
 
     }
@@ -157,16 +159,30 @@ class ChimpanzeeWithBrush {
         })
     }
 
+    getPredictionImageMap() {
+        return this.predictionImageMap;
+    }
+
+    clearPredictionImageMap() {
+        this.predictionImageMap.clear();
+    }
+
     async getViewPrediction() {
         const t1 = performance.now()
 
-        return new Promise(resolve => {
+        return new Promise(async (resolve) => {
             this.getImage().getBufferAsync(Jimp.MIME_PNG).then(image => {
                 AiManager.classifyDrawnImage(image).then(classification => {
                     console.log(classification)
-                    
+
+                    this.getBase64Image().then(img => {
+                        this.predictionImageMap.set(classification, img);
+                    })
+
                     const t2 = performance.now()
+
                     console.log(`CONVERTING IMAGE TO TENSOR AND PREDICTING IF IT IS A VIEW DONE IN ${t2 - t1} [MS]`)
+
                     resolve(classification)
                 })
             })

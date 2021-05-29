@@ -17,9 +17,10 @@ import GetAppIcon from '@material-ui/icons/GetApp';
 import AlertDialog from '../../components/AlertDialog/AlertDialog';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Point from '../../utils/Point';
 
 const DrawImage = () => {
+    const IMAGE_CHILDREN_AMOUNT = parseInt(process.env.REACT_APP_AMOUNT_OF_IMAGE_CHILDREN)
+
     const [image, setImage] = useState(placeholder)
     const [viewPrediction, setViewPrediction] = useState(0);
 
@@ -50,30 +51,38 @@ const DrawImage = () => {
     useEffect(() => {
         setIsLoading(promiseInProgress)
     }, [promiseInProgress])
+
+    useEffect(() => {
+        console.log(`VIEW PRED = ${viewPrediction}`)
+    }, [viewPrediction])
         
     const drawImageClickHandler = async () => {
-        drawNewImage()
+        //drawNewImage()
 
         const chimpanzee = new ChimpanzeeWithBrush();
         const chimpanzeeSubconscious = new ChimpanzeeSubconscious(chimpanzee)
-        chimpanzee.build().then(image => {
-            chimpanzee.setImage(image)
-            chimpanzeeSubconscious.drawAndPickBest(5).then(best => {
-                setViewPrediction(best.bestPrediction)
-                setImage(best.bestImage)
+        chimpanzee.build().then(async img => {
+            await Jimp.read(image).then(im => {
+                console.log(im)
+                chimpanzee.setImage(im)
             })
 
-            const t1 = performance.now()
 
-            chimpanzee.getBase64Image().then(img => {
-                setImage(img)
-                const t2 = performance.now()
-                console.log(`DRAWING IMAGE DONE IN ${t2 - t1} [MS]`)
-            })
+            //for(let i = 0; i < 3; i++){
+                await chimpanzeeSubconscious.drawAndPickBest(IMAGE_CHILDREN_AMOUNT).then(predictionsMap => {
+                    const highestPred = Math.max.apply(null, Array.from(predictionsMap.keys()));
 
-            chimpanzee.getViewPrediction().then(prediction => {
-                setViewPrediction(prediction)
-            })
+                    if(highestPred > viewPrediction){
+                        const bestImg = predictionsMap.get(highestPred)
+
+                        setViewPrediction(highestPred)
+                        setImage(bestImg)
+                        chimpanzee.setImage(bestImg)
+                    }
+                })  
+            //}
+
+
         })
     }
 

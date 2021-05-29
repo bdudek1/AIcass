@@ -6,20 +6,24 @@ class ShapeCreator {
     static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
     static IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
 
+    static MAX_SHAPE_FILL_PERCENTAGE = parseInt(process.env.REACT_APP_MAX_SHAPE_FILL)
+
+    static COLOR = process.env.REACT_APP_COLOR;
+
     static getCircle() {
         const randomX = Math.floor(Math.random() * this.IMAGE_WIDTH);
         const randomY = Math.floor(Math.random() * this.IMAGE_HEIGHT);
 
         const randomRadius = Math.floor(Math.random() * this.IMAGE_WIDTH/4);
 
-        const fillPercentage = Math.floor(Math.random() * 80);
+        const fillPercentage = Math.floor(Math.random() * this.MAX_SHAPE_FILL_PERCENTAGE);
 
         const middlePoint = new Point(randomX, randomY)
 
         return {point: middlePoint,
                 radius: randomRadius,
                 fillPercentage: fillPercentage,
-                colour: this.getRandomGrayColour()}
+                colour: this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()}
     }
 
     static getEllipse() {
@@ -31,7 +35,7 @@ class ShapeCreator {
 
         const randomAngle = Math.floor(Math.random() * 180)
 
-        const fillPercentage = Math.floor(Math.random() * 80);
+        const fillPercentage = Math.floor(Math.random() * this.MAX_SHAPE_FILL_PERCENTAGE);
 
         const middlePoint = new Point(randomX, randomY)
 
@@ -40,7 +44,7 @@ class ShapeCreator {
                 width: randomWidth,
                 angle: randomAngle,
                 fillPercentage: fillPercentage,
-                colour: this.getRandomGrayColour()}
+                colour: this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()}
     }
 
     static getRandomPixels() {
@@ -49,7 +53,7 @@ class ShapeCreator {
         const amountOfPixels = fillPercentage * this.IMAGE_WIDTH * this.IMAGE_HEIGHT / 100
 
         return {amountOfPixels: amountOfPixels,
-                colour: this.getRandomGrayColour()}
+                colour: this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()}
     }
 
     static getRandomGrayColour () {

@@ -1,6 +1,13 @@
 import ShapeBuilder from './ShapeBuilder';
 
 class ChimpanzeeSubconscious {
+    MAX_BRUSH_STROKES = parseInt(process.env.REACT_APP_MAX_BRUSH_STROKES)
+    MINIMUM_BRUSH_STROKES = parseInt(process.env.REACT_APP_MIN_BRUSH_STROKES)
+
+    CIRCLES_FREQUENCY = parseInt(process.env.REACT_APP_CIRCLES_FREQUENCY)
+    ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_ELLIPSE_FREQUENCY)
+    RANDOM_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
+
     chimpanzee;
 
     bestViewPrediction = 0;
@@ -20,15 +27,15 @@ class ChimpanzeeSubconscious {
 
     drawRandomShape(shapeNumber) {
         switch(true){
-            case shapeNumber < 6 :
+            case shapeNumber < this.RANDOM_FREQUENCY :
                 const randomPixels = ShapeBuilder.getRandomPixels()
                 this.getChimpanzee().drawRandomPixels(randomPixels.amountOfPixels, randomPixels.colour)
                 break;
-            case shapeNumber < 15 :
+            case shapeNumber < this.CIRCLES_FREQUENCY :
                 const randomCircle = ShapeBuilder.getCircle()
                 this.getChimpanzee().drawCircle(randomCircle.point, randomCircle.radius, randomCircle.fillPercentage, randomCircle.colour)
                 break;
-            case shapeNumber < 101 :
+            case shapeNumber < this.ELLIPSE_FREQUENCY :
                 const randomEllipse = ShapeBuilder.getEllipse()
                 this.getChimpanzee().drawLeaningEllipse(randomEllipse.height, randomEllipse.width, randomEllipse.point, randomEllipse.angle, randomEllipse.fillPercentage, randomEllipse.colour)
                 break;
@@ -47,15 +54,15 @@ class ChimpanzeeSubconscious {
 
     }
 
-    drawAndPickBest(numberOfTries) {
-        return new Promise(resolve => {
+    async drawAndPickBest(numberOfTries) {
+        return new Promise(async (resolve) => {
             let i = 0;
 
             while(i < numberOfTries) {
-                const brushStrokes = Math.floor(Math.random() * 35) + 10;
+                const brushStrokes = Math.floor(Math.random() * this.MAX_BRUSH_STROKES - this.MINIMUM_BRUSH_STROKES) + this.MINIMUM_BRUSH_STROKES;
                 this.drawRandomShapes(brushStrokes)
 
-                this.chimpanzee.getViewPrediction().then(pred => {
+                await this.chimpanzee.getViewPrediction().then(pred => {
                     if(pred > this.bestViewPrediction){
                         this.bestViewPrediction = pred;
                         this.bestImage = this.chimpanzee.getImage()
@@ -65,10 +72,8 @@ class ChimpanzeeSubconscious {
                 i++;
             }
 
-            console.log(`BEST PREDICTION: ${this.bestViewPrediction}`)
-            resolve({bestImage: this.bestImage, bestPrediction: this.bestPrediction ? this.bestPrediction : 0})
+            resolve(this.chimpanzee.getPredictionImageMap())
         })
-
     }
 }
 
