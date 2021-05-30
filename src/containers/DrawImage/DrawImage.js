@@ -47,6 +47,10 @@ const DrawImage = () => {
         buttonWidth = "150px";
         iconSize = 16;
     }
+
+    useEffect(async () => {
+
+    }, [isImageDrawing])
     
     useEffect(() => {
         setIsLoading(promiseInProgress)
@@ -56,34 +60,47 @@ const DrawImage = () => {
         console.log(`VIEW PRED = ${viewPrediction}`)
     }, [viewPrediction])
         
-    const drawImageClickHandler = async () => {
+    const drawImageClickHandler = () => {
         //drawNewImage()
+        setIsImageDrawing(true)
 
         const chimpanzee = new ChimpanzeeWithBrush();
         const chimpanzeeSubconscious = new ChimpanzeeSubconscious(chimpanzee)
+
         chimpanzee.build().then(async img => {
             await Jimp.read(image).then(im => {
-                console.log(im)
                 chimpanzee.setImage(im)
             })
 
+            while(viewPrediction < 0.2){
 
-            //for(let i = 0; i < 3; i++){
                 await chimpanzeeSubconscious.drawAndPickBest(IMAGE_CHILDREN_AMOUNT).then(predictionsMap => {
                     const highestPred = Math.max.apply(null, Array.from(predictionsMap.keys()));
 
                     if(highestPred > viewPrediction){
                         const bestImg = predictionsMap.get(highestPred)
 
-                        setViewPrediction(highestPred)
                         setImage(bestImg)
-                        chimpanzee.setImage(bestImg)
-                    }
-                })  
-            //}
 
+                        Jimp.read(bestImg).then(im => {
+                            chimpanzee.setImage(im)
+                        })
+
+                        console.log(`IS IMAGE DRAWING: ${isImageDrawing}`)
+
+                        setViewPrediction(highestPred)
+                    }
+
+                }) 
+                        
+                // if(!isImageDrawing){
+                //     break;
+                // }
+
+            }
 
         })
+
     }
 
     const closeAlertDialogHandler = () => {
