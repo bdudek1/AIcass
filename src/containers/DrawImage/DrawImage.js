@@ -92,7 +92,11 @@ const DrawImage = () => {
                     }
 
                 }) 
-                        
+
+                if(viewPrediction > 0.2){
+                    break;
+                }
+
                 // if(!isImageDrawing){
                 //     break;
                 // }
