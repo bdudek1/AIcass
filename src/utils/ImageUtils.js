@@ -4,6 +4,9 @@ class ImageUtils{
     static IMAGE_TENSOR_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_TENSOR_HEIGHT)
     static IMAGE_TENSOR_WIDTH = parseInt(process.env.REACT_APP_IMAGE_TENSOR_WIDTH)
 
+    static IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
+    static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
+
     static loadImage(src) {  
         return new Promise((resolve, reject) => { 
             const img = new Image();    
@@ -37,8 +40,14 @@ class ImageUtils{
         return img.slice([startingWidth, startingHeight, 0], [endingWidth, endingHeight, 3]);
     }
 
-    static resizeImageTensor(image) {
-        return tf.image.resizeBilinear(image, [this.IMAGE_TENSOR_HEIGHT, this.IMAGE_TENSOR_WIDTH]);
+    static resizeImageTensor(imageTensor) {
+        if(this.IMAGE_TENSOR_HEIGHT !== this.IMAGE_HEIGHT || this.IMAGE_TENSOR_WIDTH !== this.IMAGE_WIDTH){
+
+            return tf.image.resizeBilinear(imageTensor, [this.IMAGE_TENSOR_HEIGHT, this.IMAGE_TENSOR_WIDTH]);
+        }else{
+            
+            return imageTensor;
+        }
     }
 
     static batchImageTensor(image) {

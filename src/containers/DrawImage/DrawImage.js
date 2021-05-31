@@ -60,7 +60,7 @@ const DrawImage = () => {
         console.log(`VIEW PRED = ${viewPrediction}`)
     }, [viewPrediction])
         
-    const drawImageClickHandler = () => {
+    const drawImageClickHandler = async () => {
         //drawNewImage()
         setIsImageDrawing(true)
 
@@ -72,7 +72,7 @@ const DrawImage = () => {
                 chimpanzee.setImage(im)
             })
 
-            while(viewPrediction < 0.2){
+            while(viewPrediction < 100){
 
                 await chimpanzeeSubconscious.drawAndPickBest(IMAGE_CHILDREN_AMOUNT).then(predictionsMap => {
                     const highestPred = Math.max.apply(null, Array.from(predictionsMap.keys()));
@@ -93,9 +93,9 @@ const DrawImage = () => {
 
                 }) 
 
-                if(viewPrediction > 0.2){
-                    break;
-                }
+                // if(viewPrediction > 0.5){
+                //     break;
+                // }
 
                 // if(!isImageDrawing){
                 //     break;
