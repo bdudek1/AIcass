@@ -19,7 +19,8 @@ import AlertDialog from '../../components/AlertDialog/AlertDialog';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const DrawImage = () => {
-    const IMAGE_CHILDREN_AMOUNT = parseInt(process.env.REACT_APP_AMOUNT_OF_IMAGE_CHILDREN)
+    const IMAGE_CHILDREN_MINIMUM_AMOUNT = parseInt(process.env.REACT_APP_MINIMUM_AMOUNT_OF_IMAGE_CHILDREN)
+    const IMAGE_CHILDREN_MAXIMUM_AMOUNT = parseInt(process.env.REACT_APP_MAXIMUM_AMOUNT_OF_IMAGE_CHILDREN)
 
     const [image, setImage] = useState(placeholder)
     const [viewPrediction, setViewPrediction] = useState(0);
@@ -73,8 +74,9 @@ const DrawImage = () => {
             })
 
             while(viewPrediction < 100){
+                const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
 
-                await chimpanzeeSubconscious.drawAndPickBest(IMAGE_CHILDREN_AMOUNT).then(predictionsMap => {
+                await chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(predictionsMap => {
                     const highestPred = Math.max.apply(null, Array.from(predictionsMap.keys()));
 
                     if(highestPred > viewPrediction){
