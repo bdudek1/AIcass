@@ -1,6 +1,8 @@
 import Jimp from 'jimp';
+import Circle from '../shapes/Circle';
+import Ellipse from './Ellipse';
 
-import Point from "../utils/Point";
+import Point from "./Point";
 
 class ShapeCreator {
     static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
@@ -10,7 +12,7 @@ class ShapeCreator {
 
     static COLOR = process.env.REACT_APP_COLOR;
 
-    static getCircle() {
+    static getRandomCircle() {
         const randomX = Math.floor(Math.random() * this.IMAGE_WIDTH);
         const randomY = Math.floor(Math.random() * this.IMAGE_HEIGHT);
 
@@ -20,13 +22,12 @@ class ShapeCreator {
 
         const middlePoint = new Point(randomX, randomY)
 
-        return {point: middlePoint,
-                radius: randomRadius,
-                fillPercentage: fillPercentage,
-                colour: this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()}
+        const color = this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour();
+
+        return new Circle(middlePoint, fillPercentage, color, randomRadius)
     }
 
-    static getEllipse() {
+    static getRandomEllipse() {
         const randomX = Math.floor(Math.random() * this.IMAGE_WIDTH);
         const randomY = Math.floor(Math.random() * this.IMAGE_HEIGHT);
 
@@ -39,12 +40,9 @@ class ShapeCreator {
 
         const middlePoint = new Point(randomX, randomY)
 
-        return {point: middlePoint,
-                height: randomHeight,
-                width: randomWidth,
-                angle: randomAngle,
-                fillPercentage: fillPercentage,
-                colour: this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()}
+        const color = this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour();
+
+        return new Ellipse(middlePoint, fillPercentage, color, randomHeight, randomWidth, randomAngle)
     }
 
     static getRandomPixels() {

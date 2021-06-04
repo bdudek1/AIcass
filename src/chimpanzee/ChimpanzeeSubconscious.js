@@ -1,4 +1,4 @@
-import ShapeBuilder from './ShapeBuilder';
+import ShapeBuilder from '../shapes/ShapeBuilder';
 
 class ChimpanzeeSubconscious {
     MAX_BRUSH_STROKES = parseInt(process.env.REACT_APP_MAX_BRUSH_STROKES)
@@ -29,15 +29,18 @@ class ChimpanzeeSubconscious {
         switch(true){
             case shapeNumber < this.RANDOM_FREQUENCY :
                 const randomPixels = ShapeBuilder.getRandomPixels()
+                //this.getChimpanzee().randomEffect()
                 this.getChimpanzee().drawRandomPixels(randomPixels.amountOfPixels, randomPixels.colour)
                 break;
             case shapeNumber < this.CIRCLES_FREQUENCY :
-                const randomCircle = ShapeBuilder.getCircle()
-                this.getChimpanzee().drawCircle(randomCircle.point, randomCircle.radius, randomCircle.fillPercentage, randomCircle.colour)
+                const randomCircle = ShapeBuilder.getRandomCircle()
+                //this.getChimpanzee().randomEffect()
+                this.getChimpanzee().drawCircle(randomCircle)
                 break;
             case shapeNumber < this.ELLIPSE_FREQUENCY :
-                const randomEllipse = ShapeBuilder.getEllipse()
-                this.getChimpanzee().drawLeaningEllipse(randomEllipse.height, randomEllipse.width, randomEllipse.point, randomEllipse.angle, randomEllipse.fillPercentage, randomEllipse.colour)
+                const randomEllipse = ShapeBuilder.getRandomEllipse()
+                //this.getChimpanzee().randomEffect()
+                this.getChimpanzee().drawLeaningEllipse(randomEllipse)
                 break;
         }
     }

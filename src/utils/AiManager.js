@@ -55,12 +55,12 @@ class AiManager{
                     trackPromise(
                         ImageUtils.loadImage(file).then(image => {
                             file.image = image
-                            file.tensor = ImageUtils.convertImageToTensor(image);
+                            file.tensor = ImageUtils.convertImageToTensor(image, false);
 
                             const prediction = this.getPrediction(file)
                             file.viewPrediction = this.classifyPrediction(prediction);
                             file.highestPrediction = this.getHighestClassification(prediction)
-                        }).then(() => {
+                        }).catch(err => console.log(err)).then(() => {
                             
                             //if the list does not anymore contain undefined views then sort it by it
                             if(!list.find(item => item.viewPrediction === undefined)){
@@ -81,7 +81,7 @@ class AiManager{
          return new Promise(resolve => {
              tf.tidy(() => {
                 ImageUtils.loadImage(new Blob([image.buffer], { type: 'image/png' })).then(img => {
-                    const tensor = ImageUtils.convertImageToTensor(img)
+                    const tensor = ImageUtils.convertImageToTensor(img, true)
 
                     const viewPrediction = this.getPredictionByTensor(tensor)
                     resolve(this.classifyPrediction(viewPrediction))

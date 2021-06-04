@@ -16,13 +16,13 @@ class ImageUtils{
     });}
 
 
-    static convertImageToTensor(image) {  
+    static convertImageToTensor(image, isDrawn) {  
         const tensorImage = tf.browser.fromPixels(image);
 
         //nie jest konieczne ale warto uwazac, dla niektorych img po prostu sie wysypuje
         //const croppedTensor = this.cropImageTensor(tensorImage);  
         
-        const resizedTensor = this.resizeImageTensor(tensorImage);  
+        const resizedTensor = this.resizeImageTensor(tensorImage, isDrawn);  
         const batchedTensor = this.batchImageTensor(resizedTensor);  
 
         return batchedTensor;
@@ -40,8 +40,8 @@ class ImageUtils{
         return img.slice([startingWidth, startingHeight, 0], [endingWidth, endingHeight, 3]);
     }
 
-    static resizeImageTensor(imageTensor) {
-        if(this.IMAGE_TENSOR_HEIGHT !== this.IMAGE_HEIGHT || this.IMAGE_TENSOR_WIDTH !== this.IMAGE_WIDTH){
+    static resizeImageTensor(imageTensor, isDrawn) {
+        if((this.IMAGE_TENSOR_HEIGHT !== this.IMAGE_HEIGHT || this.IMAGE_TENSOR_WIDTH !== this.IMAGE_WIDTH) || !isDrawn){
 
             return tf.image.resizeBilinear(imageTensor, [this.IMAGE_TENSOR_HEIGHT, this.IMAGE_TENSOR_WIDTH]);
         }else{

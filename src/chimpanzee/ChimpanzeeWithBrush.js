@@ -1,8 +1,8 @@
 import Jimp from 'jimp';
 
-import AiManager from '../utils/AiManager'
+import AiManager from '../utils/AiManager';
 import MathUtils from '../utils/MathUtils';
-import Point from '../utils/Point';
+import Point from '../shapes/Point';
 
 class ChimpanzeeWithBrush {
     IMAGE_TENSOR_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_TENSOR_HEIGHT)
@@ -48,92 +48,92 @@ class ChimpanzeeWithBrush {
         }
     }
 
-    drawCircle(middlePoint, radius, fillPercentage, colour) {
-        const amountOfPixels = 3.14*radius*radius*fillPercentage/100;
+    drawCircle(circle) {
+        const amountOfPixels = 3.14 * circle.getRadius() * circle.getRadius() * circle.getFillPercentage()/100;
 
         let pixelsDrawn = 0;
         while(pixelsDrawn < amountOfPixels){
-                let randomX = Math.floor(Math.random() * radius * 2) - radius + middlePoint.getX();
-                let randomY = Math.floor(Math.random() * radius * 2) - radius + middlePoint.getY();
+                let randomX = Math.floor(Math.random() * circle.getRadius() * 2) - circle.getRadius() + circle.getMiddlePoint().getX();
+                let randomY = Math.floor(Math.random() * circle.getRadius() * 2) - circle.getRadius() + circle.getMiddlePoint().getY();
                 let randomPoint = new Point(randomX, randomY)
 
             //checking if the point is in the circle, if not new one generated
-            while(MathUtils.getDistanceBetweenPoints(randomPoint, middlePoint) > radius){
-                randomX = Math.floor(Math.random() * radius * 2) - radius + middlePoint.getX();
-                randomY = Math.floor(Math.random() * radius * 2) - radius + middlePoint.getY();
+            while(MathUtils.getDistanceBetweenPoints(randomPoint, circle.middlePoint) > circle.radius){
+                randomX = Math.floor(Math.random() * circle.getRadius() * 2) - circle.getRadius() + circle.getMiddlePoint().getX();
+                randomY = Math.floor(Math.random() * circle.getRadius() * 2) - circle.getRadius() + circle.getMiddlePoint().getY();
                 randomPoint = new Point(randomX, randomY)
             }
 
-            this.drawPixel(colour, randomPoint)
+            this.drawPixel(circle.getColour(), randomPoint)
 
             pixelsDrawn++;
         }
     }
 
-    drawEllipse(height, width, middlePoint, fillPercentage, colour) {
-        const amountOfPixels = 3.14*(height/2)*(width/2)*fillPercentage/100;
+    drawEllipse(ellipse) {
+        const amountOfPixels = 3.14*(ellipse.getHeight()/2)*(ellipse.getWidth()/2)*ellipse.getFillPercentage()/100;
         
-        const distanceBetweenFocals = Math.sqrt(Math.pow(width/2, 2) - Math.pow(height/2, 2))
-        const focal1 = new Point(middlePoint.getX() - distanceBetweenFocals, middlePoint.getY())
-        const focal2 = new Point(middlePoint.getX() + distanceBetweenFocals, middlePoint.getY())
+        const distanceBetweenFocals = Math.sqrt(Math.pow(ellipse.getWidth()/2, 2) - Math.pow(ellipse.getHeight()/2, 2))
+        const focal1 = new Point(ellipse.getMiddlePoint().getX() - distanceBetweenFocals, ellipse.getMiddlePoint().getY())
+        const focal2 = new Point(ellipse.getMiddlePoint().getX() + distanceBetweenFocals, ellipse.getMiddlePoint().getY())
 
-        const maxDistanceToFocals = width
+        const maxDistanceToFocals = ellipse.getWidth()
 
         let pixelsDrawn = 0
         while(pixelsDrawn < amountOfPixels){
-            let randomX = Math.floor(Math.random() * width) - width/2 + middlePoint.getX();
-            let randomY = Math.floor(Math.random() * height) - height/2 + middlePoint.getY();
+            let randomX = Math.floor(Math.random() * ellipse.getWidth()) - ellipse.getWidth()/2 + ellipse.getMiddlePoint().getX();
+            let randomY = Math.floor(Math.random() * ellipse.getHeight()) - ellipse.getHeight()/2 + ellipse.getMiddlePoint().getY();
             let randomPoint = new Point(randomX, randomY)
 
             //checking if the point is in the ellipse, if not new one generated
             while(MathUtils.getDistanceToTwoPoints(randomPoint, focal1, focal2) > maxDistanceToFocals){
-                randomX = Math.floor(Math.random() * width) - width/2 + middlePoint.getX();
-                randomY = Math.floor(Math.random() * height) - height/2 + middlePoint.getY();
+                randomX = Math.floor(Math.random() * ellipse.getWidth()) - ellipse.getWidth()/2 + ellipse.getMiddlePoint().getX();
+                randomY = Math.floor(Math.random() * ellipse.getHeight()) - ellipse.getHeight()/2 + ellipse.getMiddlePoint().getY();
                 randomPoint = new Point(randomX, randomY)
             }
 
-            this.drawPixel(colour, randomPoint)
+            this.drawPixel(ellipse.getColour(), randomPoint)
 
             pixelsDrawn++;
         }
     }
 
-    drawLeaningEllipse(height, width, middlePoint, angle, fillPercentage, colour) {
-        const amountOfPixels = 3.14*(height/2)*(width/2)*fillPercentage/100;
+    drawLeaningEllipse(ellipse) {
+        const amountOfPixels = 3.14*(ellipse.getHeight()/2)*(ellipse.getWidth()/2)*ellipse.getFillPercentage()/100;
 
-        if(height > width){
-            const bufHeight = height;
-            height = width;
-            width = bufHeight
+        if(ellipse.getHeight() > ellipse.getWidth()){
+            const bufHeight = ellipse.getHeight();
+            ellipse.setHeight(ellipse.getWidth());
+            ellipse.setWidth(bufHeight);
         }
 
-        const radiansAngle = angle*3.14/180;
+        const radiansAngle = ellipse.getAngle()*3.14/180;
         
-        const distanceBetweenFocals = Math.sqrt(Math.pow(width/2, 2) - Math.pow(height/2, 2))
+        const distanceBetweenFocals = Math.sqrt(Math.pow(ellipse.getWidth()/2, 2) - Math.pow(ellipse.getHeight()/2, 2))
 
-        const focal1 = new Point(middlePoint.getX() - distanceBetweenFocals*Math.cos(radiansAngle), middlePoint.getY() - distanceBetweenFocals*Math.sin(radiansAngle))
-        const focal2 = new Point(middlePoint.getX() + distanceBetweenFocals*Math.cos(radiansAngle), middlePoint.getY() + distanceBetweenFocals*Math.sin(radiansAngle))
+        const focal1 = new Point(ellipse.getMiddlePoint().getX() - distanceBetweenFocals*Math.cos(radiansAngle), ellipse.getMiddlePoint().getY() - distanceBetweenFocals*Math.sin(radiansAngle))
+        const focal2 = new Point(ellipse.getMiddlePoint().getX() + distanceBetweenFocals*Math.cos(radiansAngle), ellipse.getMiddlePoint().getY() + distanceBetweenFocals*Math.sin(radiansAngle))
 
-        const rectWidth = width + height
-        const rectHeight = height + width
+        const rectWidth = ellipse.getWidth() + ellipse.getHeight()
+        const rectHeight = ellipse.getHeight() + ellipse.getWidth()
 
-        const maxDistanceToFocals = width
+        const maxDistanceToFocals = ellipse.getWidth()
 
         let pixelsDrawn = 0
 
         while(pixelsDrawn < amountOfPixels){
-            let randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2+ middlePoint.getX();
-            let randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + middlePoint.getY();
+            let randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2 + ellipse.getMiddlePoint().getX();
+            let randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + ellipse.getMiddlePoint().getY();
             let randomPoint = new Point(randomX, randomY)
 
             //checking if the point is in the ellipse, if not new one generated
             while(MathUtils.getDistanceToTwoPoints(randomPoint, focal1, focal2) > maxDistanceToFocals) {
-                randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2+ middlePoint.getX();
-                randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + middlePoint.getY();
+                randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2+ ellipse.getMiddlePoint().getX();
+                randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + ellipse.getMiddlePoint().getY();
                 randomPoint = new Point(randomX, randomY)
             }
 
-            this.drawPixel(colour, randomPoint)
+            this.drawPixel(ellipse.getColour(), randomPoint)
 
             pixelsDrawn++;
         }
@@ -141,6 +141,10 @@ class ChimpanzeeWithBrush {
 
     drawPixel(colour, point) {
         this.getImage().setPixelColor(colour, point.getX(), point.getY());
+    }
+
+    randomEffect() {
+        this.setImage(this.getImage().sepia());
     }
 
     setImage(image) {
