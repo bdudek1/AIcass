@@ -6,7 +6,9 @@ class ChimpanzeeSubconscious {
 
     CIRCLES_FREQUENCY = parseInt(process.env.REACT_APP_CIRCLES_FREQUENCY)
     ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_ELLIPSE_FREQUENCY)
-    RANDOM_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
+    RANDOM_PIXELS_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
+    RANDOM_EFFECT_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_EFFECT_FREQUENCY)
+
 
     chimpanzee;
 
@@ -27,19 +29,19 @@ class ChimpanzeeSubconscious {
 
     drawRandomShape(shapeNumber) {
         switch(true){
-            case shapeNumber < this.RANDOM_FREQUENCY :
+            case shapeNumber < this.RANDOM_EFFECT_FREQUENCY :
+                this.getChimpanzee().randomEffect()
+                break;
+            case shapeNumber < this.RANDOM_PIXELS_FREQUENCY :
                 const randomPixels = ShapeBuilder.getRandomPixels()
-                //this.getChimpanzee().randomEffect()
                 this.getChimpanzee().drawRandomPixels(randomPixels.amountOfPixels, randomPixels.colour)
                 break;
             case shapeNumber < this.CIRCLES_FREQUENCY :
                 const randomCircle = ShapeBuilder.getRandomCircle()
-                //this.getChimpanzee().randomEffect()
                 this.getChimpanzee().drawCircle(randomCircle)
                 break;
             case shapeNumber < this.ELLIPSE_FREQUENCY :
                 const randomEllipse = ShapeBuilder.getRandomEllipse()
-                //this.getChimpanzee().randomEffect()
                 this.getChimpanzee().drawLeaningEllipse(randomEllipse)
                 break;
         }
