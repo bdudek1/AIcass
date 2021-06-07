@@ -1,4 +1,5 @@
 import ShapeBuilder from '../shapes/ShapeBuilder';
+import ChimpanzeeWithBrush from '../chimpanzee/ChimpanzeeWithBrush';
 
 class ChimpanzeeSubconscious {
     MAX_BRUSH_STROKES = parseInt(process.env.REACT_APP_MAX_BRUSH_STROKES)
@@ -15,8 +16,8 @@ class ChimpanzeeSubconscious {
     bestViewPrediction = 0;
     bestImage;
 
-    constructor(chimpanzee) {
-        this.chimpanzee = chimpanzee;
+    constructor() {
+        this.chimpanzee = new ChimpanzeeWithBrush();
     }
 
     setChimpanzee(chimpanzee) {

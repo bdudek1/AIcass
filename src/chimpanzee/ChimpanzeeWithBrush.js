@@ -144,38 +144,36 @@ class ChimpanzeeWithBrush {
     }
 
     randomEffect() {
-        const randomEffectNumber = Math.random()*9;
+        const randomEffectNumber = Math.random()*8;
+
         switch(true){
             case randomEffectNumber < 1 :
-                this.setImage(this.getImage().sepia());
-                break;
-            case randomEffectNumber < 2 :
                 this.setImage(this.getImage().dither565());
                 break;
-            case randomEffectNumber < 3 :
+            case randomEffectNumber < 2 :
                 const brightness = Math.random()*2 - 1;
                 this.setImage(this.getImage().brightness(brightness));
                 break;
-            case randomEffectNumber < 4 :
+            case randomEffectNumber < 3 :
                 const contrast = Math.random()*2 - 1;
                 this.setImage(this.getImage().contrast(contrast));
                 break;
-            case randomEffectNumber < 5 :
+            case randomEffectNumber < 4 :
                 this.setImage(this.getImage().normalize())
                 break;
-            case randomEffectNumber < 6 :
+            case randomEffectNumber < 5 :
                 const posterizeFactor = Math.floor(Math.random()*250 + 1)
                 this.setImage(this.getImage().posterize(posterizeFactor))
                 break;
-            case randomEffectNumber < 7 :
+            case randomEffectNumber < 6 :
                 const blurFactor = Math.floor(Math.random()*2 + 1)
                 this.setImage(this.getImage().blur(blurFactor))
                 break;
-            case randomEffectNumber < 8 :
+            case randomEffectNumber < 7 :
                 const gaussFactor = Math.floor(Math.random()*3 + 1)
                 this.setImage(this.getImage().gaussian(gaussFactor))
                 break;
-            case randomEffectNumber < 9 :
+            case randomEffectNumber < 8 :
                 const pixelateFactor = Math.random()*10
                 this.setImage(this.getImage().pixelate(pixelateFactor))
                 break;

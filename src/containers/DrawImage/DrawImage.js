@@ -65,12 +65,14 @@ const DrawImage = () => {
         //drawNewImage()
         setIsImageDrawing(true)
 
-        const chimpanzee = new ChimpanzeeWithBrush();
-        const chimpanzeeSubconscious = new ChimpanzeeSubconscious(chimpanzee)
+        const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
 
-        chimpanzee.build().then(async img => {
+        chimpanzeeSubconscious.getChimpanzee()
+                              .build()
+                              .then(async img => {
+
             await Jimp.read(image).then(im => {
-                chimpanzee.setImage(im)
+                chimpanzeeSubconscious.getChimpanzee().setImage(im)
             })
 
             while(viewPrediction < 100){
@@ -85,7 +87,7 @@ const DrawImage = () => {
                         setImage(bestImg)
 
                         Jimp.read(bestImg).then(im => {
-                            chimpanzee.setImage(im)
+                            chimpanzeeSubconscious.getChimpanzee().setImage(im)
                         })
 
                         console.log(`IS IMAGE DRAWING: ${isImageDrawing}`)
