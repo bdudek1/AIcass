@@ -1,4 +1,4 @@
-import ShapeBuilder from '../shapes/ShapeBuilder';
+import ShapeFactory from '../shapes/ShapeFactory';
 import ChimpanzeeWithBrush from '../chimpanzee/ChimpanzeeWithBrush';
 
 class ChimpanzeeSubconscious {
@@ -34,15 +34,15 @@ class ChimpanzeeSubconscious {
                 this.getChimpanzee().randomEffect()
                 break;
             case shapeNumber < this.RANDOM_PIXELS_FREQUENCY :
-                const randomPixels = ShapeBuilder.getRandomPixels()
+                const randomPixels = ShapeFactory.getRandomPixels()
                 this.getChimpanzee().drawRandomPixels(randomPixels.amountOfPixels, randomPixels.colour)
                 break;
             case shapeNumber < this.CIRCLES_FREQUENCY :
-                const randomCircle = ShapeBuilder.getRandomCircle()
+                const randomCircle = ShapeFactory.getRandomCircle()
                 this.getChimpanzee().drawCircle(randomCircle)
                 break;
             case shapeNumber < this.ELLIPSE_FREQUENCY :
-                const randomEllipse = ShapeBuilder.getRandomEllipse()
+                const randomEllipse = ShapeFactory.getRandomEllipse()
                 this.getChimpanzee().drawLeaningEllipse(randomEllipse)
                 break;
         }
@@ -60,25 +60,33 @@ class ChimpanzeeSubconscious {
 
     }
 
-    async drawAndPickBest(numberOfTries) {
+    drawAndPickBest(numberOfTries) {
         return new Promise(async (resolve) => {
+            const t1 = performance.now()
             let i = 0;
 
             while(i < numberOfTries) {
                 const brushStrokes = Math.floor(Math.random() * this.MAX_BRUSH_STROKES - this.MINIMUM_BRUSH_STROKES) + this.MINIMUM_BRUSH_STROKES;
-                this.drawRandomShapes(brushStrokes)
 
-                await this.chimpanzee.getViewPrediction().then(pred => {
-                    if(pred > this.bestViewPrediction){
-                        this.bestViewPrediction = pred;
-                        this.bestImage = this.chimpanzee.getImage()
-                    }
-                })
+                    this.drawRandomShapes(brushStrokes)
 
-                i++;
+                    await this.getChimpanzee().getViewPrediction().then(pred => {
+                        if(pred > this.bestViewPrediction){
+                            this.bestViewPrediction = pred;
+                            this.bestImage = this.getChimpanzee().getImage()
+                        }
+
+                        console.log(i)
+                        i++; 
+                    })
+
             }
+            
+            const t2 = performance.now()
 
-            resolve(this.chimpanzee.getPredictionImageMap())
+            console.log(`PROCESSING IMAGES CHILDREN DONE IN ${t2 - t1} [MS]`)
+
+            resolve({bestPrediction: this.getChimpanzee().getBestPrediction(), bestImage: this.getChimpanzee().getBestImage()})
         })
     }
 }

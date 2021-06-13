@@ -57,9 +57,7 @@ const Image = (props) => {
             setShowNftButton(true)
         }
 
-        console.log(props.isDrawing)
         props.setDrawing(!props.isDrawing)
-        console.log(props.isDrawing)
     }
 
     const handleRefreshClick = () => {

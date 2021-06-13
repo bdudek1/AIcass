@@ -14,7 +14,8 @@ class ChimpanzeeWithBrush {
     image;
     imageTensor;
 
-    predictionImageMap = new Map();
+    bestImage;
+    bestPrediction = 0;
 
     constructor() {
 
@@ -197,29 +198,39 @@ class ChimpanzeeWithBrush {
         })
     }
 
-    getPredictionImageMap() {
-        return this.predictionImageMap;
+    getBestPrediction() {
+        return this.bestPrediction;
     }
 
-    clearPredictionImageMap() {
-        this.predictionImageMap.clear();
+    setBestPrediction(prediction) {
+        this.bestPrediction = prediction;
     }
 
-    async getViewPrediction() {
+    getBestImage() {
+        return this.bestImage;
+    }
+
+    setBestImage(image) {
+        this.bestImage = image;
+    }
+
+    getViewPrediction() {
         const t1 = performance.now()
 
-        return new Promise(async (resolve) => {
+        return new Promise((resolve) => {
             this.getImage().getBufferAsync(Jimp.MIME_PNG).then(image => {
                 AiManager.classifyDrawnImage(image).then(classification => {
-                    console.log(classification)
 
-                    this.getBase64Image().then(img => {
-                        this.predictionImageMap.set(classification, img);
-                    })
+                    if(classification > this.bestPrediction){
+                        this.getBase64Image().then(img => {
+                            this.setBestPrediction(classification)
+                            this.setBestImage(img)
+                        })
+                    }
 
                     const t2 = performance.now()
 
-                    console.log(`CONVERTING IMAGE TO TENSOR AND PREDICTING IF IT IS A VIEW DONE IN ${t2 - t1} [MS]`)
+                    //console.log(`CONVERTING IMAGE TO TENSOR AND PREDICTING IF IT IS A VIEW DONE IN ${t2 - t1} [MS]`)
 
                     resolve(classification)
                 })

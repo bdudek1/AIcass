@@ -49,8 +49,8 @@ const DrawImage = () => {
         iconSize = 16;
     }
 
-    useEffect(async () => {
-
+    useEffect(() => {
+        console.log(isImageDrawing)
     }, [isImageDrawing])
     
     useEffect(() => {
@@ -61,7 +61,7 @@ const DrawImage = () => {
         console.log(`VIEW PRED = ${viewPrediction}`)
     }, [viewPrediction])
         
-    const drawImageClickHandler = async () => {
+    const drawImageClickHandler = () => {
         //drawNewImage()
         setIsImageDrawing(true)
 
@@ -69,43 +69,38 @@ const DrawImage = () => {
 
         chimpanzeeSubconscious.getChimpanzee()
                               .build()
-                              .then(async img => {
+                              .then(() => {
 
-            await Jimp.read(image).then(im => {
+            Jimp.read(image).then(im => {
                 chimpanzeeSubconscious.getChimpanzee().setImage(im)
-            })
+            }).then(() => {
 
-            while(viewPrediction < 100){
-                const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
+                    const myFunction = () => {
 
-                await chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(predictionsMap => {
-                    const highestPred = Math.max.apply(null, Array.from(predictionsMap.keys()));
+                        const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
 
-                    if(highestPred > viewPrediction){
-                        const bestImg = predictionsMap.get(highestPred)
+                        chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
 
-                        setImage(bestImg)
+                            if(prediction.bestPrediction > viewPrediction){
+                                setImage(prediction.bestImage)
 
-                        Jimp.read(bestImg).then(im => {
-                            chimpanzeeSubconscious.getChimpanzee().setImage(im)
+                                Jimp.read(prediction.bestImage).then(im => {
+                                    chimpanzeeSubconscious.getChimpanzee().setImage(im)
+                                })
+
+                                setViewPrediction(prediction.bestPrediction)
+
+                            }
+
+                        }).then(() => {
+                            setTimeout( myFunction, 5 );
                         })
 
-                        console.log(`IS IMAGE DRAWING: ${isImageDrawing}`)
+                }
 
-                        setViewPrediction(highestPred)
-                    }
+                myFunction();
 
-                }) 
-
-                // if(viewPrediction > 0.5){
-                //     break;
-                // }
-
-                // if(!isImageDrawing){
-                //     break;
-                // }
-
-            }
+            })
 
         })
 
