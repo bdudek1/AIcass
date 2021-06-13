@@ -8,7 +8,6 @@ import { usePromiseTracker } from "react-promise-tracker";
 import './DrawImage.css';
 
 import ChimpanzeeSubconscious from '../../chimpanzee/ChimpanzeeSubconscious';
-import ChimpanzeeWithBrush from '../../chimpanzee/ChimpanzeeWithBrush';
 
 import Button from '../../components/UI/Button/Button';
 import Image from './Image/Image';
@@ -63,7 +62,7 @@ const DrawImage = () => {
         
     const drawImageClickHandler = () => {
         //drawNewImage()
-        setIsImageDrawing(true)
+        //setIsImageDrawing(true)
 
         const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
 
@@ -81,19 +80,21 @@ const DrawImage = () => {
 
                         chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
 
-                            if(prediction.bestPrediction > viewPrediction){
+                            if(prediction.bestPrediction*100 > viewPrediction){
                                 setImage(prediction.bestImage)
 
                                 Jimp.read(prediction.bestImage).then(im => {
                                     chimpanzeeSubconscious.getChimpanzee().setImage(im)
                                 })
 
-                                setViewPrediction(prediction.bestPrediction)
+                                setViewPrediction(prediction.bestPrediction*100)
 
                             }
 
                         }).then(() => {
-                            setTimeout( myFunction, 5 );
+                            if(!isImageDrawing){
+                                setTimeout( myFunction, 5 ); 
+                            }
                         })
 
                 }
