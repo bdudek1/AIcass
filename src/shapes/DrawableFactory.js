@@ -2,6 +2,8 @@ import Jimp from 'jimp';
 
 import Circle from './Circle';
 import Ellipse from './Ellipse';
+import DenseCircle from './DenseCircle';
+import DenseEllipse from './DenseEllipse';
 import RandomPixels from './RandomPixels';
 import Point from "./Point";
 import RandomEffect from './RandomEffect';
@@ -12,6 +14,8 @@ class DrawableFactory {
 
     static CIRCLES_FREQUENCY = parseInt(process.env.REACT_APP_CIRCLES_FREQUENCY)
     static ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_ELLIPSE_FREQUENCY)
+    static DENSE_CIRCLES_FREQUENCY = parseInt(process.env.REACT_APP_DENSE_CIRCLES_FREQUENCY)
+    static DENSE_ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_DENSE_ELLIPSE_FREQUENCY)
     static RANDOM_PIXELS_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
     static RANDOM_EFFECT_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_EFFECT_FREQUENCY)
 
@@ -19,7 +23,7 @@ class DrawableFactory {
 
     static COLOR = process.env.REACT_APP_COLOR;
 
-    static getRandomCircle() {
+    static getRandomCircle(isDense) {
         const randomX = Math.floor(Math.random() * this.IMAGE_WIDTH);
         const randomY = Math.floor(Math.random() * this.IMAGE_HEIGHT);
 
@@ -31,10 +35,15 @@ class DrawableFactory {
 
         const color = this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour();
 
-        return new Circle(middlePoint, fillPercentage, color, randomRadius)
+        if(isDense) {
+            return new DenseCircle(middlePoint, fillPercentage, color, randomRadius)
+        }else{
+            return new Circle(middlePoint, fillPercentage, color, randomRadius)
+        }
+
     }
 
-    static getRandomEllipse() {
+    static getRandomEllipse(isDense) {
         const randomX = Math.floor(Math.random() * this.IMAGE_WIDTH);
         const randomY = Math.floor(Math.random() * this.IMAGE_HEIGHT);
 
@@ -49,7 +58,11 @@ class DrawableFactory {
 
         const color = this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour();
 
-        return new Ellipse(middlePoint, fillPercentage, color, randomHeight, randomWidth, randomAngle)
+        if(isDense) {
+            return new DenseEllipse(middlePoint, fillPercentage, color, randomHeight, randomWidth, randomAngle)
+        }else{
+            return new Ellipse(middlePoint, fillPercentage, color, randomHeight, randomWidth, randomAngle)
+        }
     }
 
     static getRandomPixels() {
@@ -67,7 +80,7 @@ class DrawableFactory {
     }
 
     static getRandomDrawable() {
-        const shapeNumber = Math.floor(Math.random() * 100);
+        const shapeNumber = Math.floor(Math.random() * this.DENSE_ELLIPSE_FREQUENCY);
 
         switch(true){
             case shapeNumber < this.RANDOM_EFFECT_FREQUENCY :
@@ -75,10 +88,15 @@ class DrawableFactory {
             case shapeNumber < this.RANDOM_PIXELS_FREQUENCY :
                 return this.getRandomPixels()
             case shapeNumber < this.CIRCLES_FREQUENCY :
-                return this.getRandomCircle()
+                return this.getRandomCircle(false)
+            case shapeNumber < this.DENSE_CIRCLES_FREQUENCY :
+                return this.getRandomCircle(true)
             case shapeNumber < this.ELLIPSE_FREQUENCY :
-                return this.getRandomEllipse()
+                return this.getRandomEllipse(false)
+            case shapeNumber < this.DENSE_ELLIPSE_FREQUENCY :
+                return this.getRandomEllipse(true)
         }
+
     }
 
     static getRandomGrayColour () {

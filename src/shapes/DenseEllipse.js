@@ -1,38 +1,15 @@
-import Shape from './Shape';
-import MathUtils from '../utils/MathUtils';
-import Point from '../shapes/Point';
+import Ellipse from './Ellipse';
+import Point from "./Point";
 
-class Ellipse extends Shape {
-    height;
-    width;
-    angle;
+import MathUtils from "../utils/MathUtils"
 
-    constructor(middlePoint, fillPercentage, colour, height, width, angle){
-        super(middlePoint, fillPercentage, colour)
+class DenseEllipse extends Ellipse {
+    denseFactor;
+
+    constructor(middlePoint, fillPercentage, colour, height, width, angle) {
+        super(middlePoint, fillPercentage, colour, height, width, angle);
         
-        this.height = height;
-        this.width = width;
-        this.angle = angle;
-    }
-
-    getHeight() {
-        return this.height;
-    }
-
-    getWidth() {
-        return this.width;
-    }
-
-    getAngle() {
-        return this.angle;
-    }
-
-    setHeight(height){
-        this.height = height;
-    }
-
-    setWidth(width){
-        this.width = width;
+        this.denseFactor = Math.random()*3 + 2;
     }
 
     draw(image) {
@@ -41,7 +18,7 @@ class Ellipse extends Shape {
             return;
         }
 
-        const amountOfPixels = 3.14*(this.getHeight()/2)*(this.getWidth()/2)*this.getFillPercentage()/100;
+        const amountOfPixels = 3.14*(this.getHeight()/2)*(this.getWidth()/2)*this.getFillPercentage()/100*1.3;
 
         if(this.getHeight() > this.getWidth()){
             const bufHeight = this.getHeight();
@@ -64,14 +41,14 @@ class Ellipse extends Shape {
         let pixelsDrawn = 0
 
         while(pixelsDrawn < amountOfPixels){
-            let randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2 + this.getMiddlePoint().getX();
-            let randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + this.getMiddlePoint().getY();
+            let randomX = Math.floor(Math.random()**this.denseFactor * rectWidth) - rectWidth/2 * Math.random()**this.denseFactor + this.getMiddlePoint().getX();
+            let randomY = Math.floor(Math.random()**this.denseFactor * rectHeight) - rectHeight/2 * Math.random()**this.denseFactor + this.getMiddlePoint().getY();
             let randomPoint = new Point(randomX, randomY)
 
             //checking if the point is in the ellipse, if not new one generated
             while(MathUtils.getDistanceToTwoPoints(randomPoint, focal1, focal2) > maxDistanceToFocals) {
-                randomX = Math.floor(Math.random() * rectWidth) - rectWidth/2+ this.getMiddlePoint().getX();
-                randomY = Math.floor(Math.random() * rectHeight) - rectHeight/2 + this.getMiddlePoint().getY();
+                randomX = Math.floor(Math.random()**this.denseFactor * rectWidth) - rectWidth/2 * Math.random()**this.denseFactor + this.getMiddlePoint().getX();
+                randomY = Math.floor(Math.random()**this.denseFactor * rectHeight) - rectHeight/2 * Math.random()**this.denseFactor + this.getMiddlePoint().getY();
                 randomPoint = new Point(randomX, randomY)
             }
 
@@ -83,4 +60,4 @@ class Ellipse extends Shape {
 
 }
 
-export default Ellipse;
+export default DenseEllipse;

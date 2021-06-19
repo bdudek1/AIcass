@@ -1,4 +1,5 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react';
+import { useHistory } from 'react-router-dom';
 import Jimp from 'jimp';
 
 import placeholder from '../../assets/images/placeholder.png';
@@ -18,11 +19,15 @@ import AlertDialog from '../../components/AlertDialog/AlertDialog';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const DrawImage = () => {
+    const history = useHistory() 
+
     const IMAGE_CHILDREN_MINIMUM_AMOUNT = parseInt(process.env.REACT_APP_MINIMUM_AMOUNT_OF_IMAGE_CHILDREN)
     const IMAGE_CHILDREN_MAXIMUM_AMOUNT = parseInt(process.env.REACT_APP_MAXIMUM_AMOUNT_OF_IMAGE_CHILDREN)
 
     const [image, setImage] = useState(placeholder)
+
     const [viewPrediction, setViewPrediction] = useState(0);
+    const [drawingTime, setDrawingTime] = useState(0);
 
     const { promiseInProgress } = usePromiseTracker();
 
@@ -30,6 +35,9 @@ const DrawImage = () => {
     const [isImageDrawn, setIsImageDrawn] = useState(false);
     const [isImageDrawing, setIsImageDrawing] = useState(false)
     const [showDrawImageDialog, setShowDrawImageDialog] = useState(false);
+
+    const isImageDrawingRef = useRef(isImageDrawing);
+    isImageDrawingRef.current = isImageDrawing;
 
     const isMobile = useMediaQuery('(max-width:768px)')
     const isSmallMobile = useMediaQuery('(max-width:500px)')
@@ -49,7 +57,62 @@ const DrawImage = () => {
     }
 
     useEffect(() => {
-        console.log(isImageDrawing)
+        history.listen(() => { 
+           console.log(`${history.location.pathname}`) 
+        }) 
+        refreshImage()
+        isImageDrawingRef.current = isImageDrawing;
+
+     }, [history]) 
+
+    useEffect(() => {
+        if(isImageDrawing){
+
+            const startTime = drawingTime + performance.now()
+
+            const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
+    
+            chimpanzeeSubconscious.getChimpanzee(image)
+                                  .build()
+                                  .then(() => {
+    
+                Jimp.read(image).then(im => {
+                    chimpanzeeSubconscious.getChimpanzee().setImage(im)
+                }).then(() => {
+    
+                    const drawAndGetBest = () => {
+    
+                        const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
+    
+                        chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
+    
+                            if(prediction.bestPrediction*100 > viewPrediction){
+                                setImage(prediction.bestImage)
+    
+                                Jimp.read(prediction.bestImage).then(im => {
+                                    chimpanzeeSubconscious.getChimpanzee().setImage(im)
+                                })
+    
+                                setViewPrediction(prediction.bestPrediction*100)
+    
+                            }
+    
+                            setDrawingTime(drawingTime + Math.floor((performance.now() - startTime)/1000))
+                        }).then(() => {
+                            console.log(`IS IMAGE DRAWING BEFORE SET TIMEOUT: ${isImageDrawingRef.current}`)
+                            if(isImageDrawingRef.current && history.location.pathname === "/"){
+                                setTimeout( drawAndGetBest, 0 ); 
+                            }
+                        })
+    
+                }
+    
+                    drawAndGetBest();
+    
+                })
+    
+            })
+        }
     }, [isImageDrawing])
     
     useEffect(() => {
@@ -61,50 +124,7 @@ const DrawImage = () => {
     }, [viewPrediction])
         
     const drawImageClickHandler = () => {
-        //drawNewImage()
-        //setIsImageDrawing(true)
-
-        const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
-
-        chimpanzeeSubconscious.getChimpanzee()
-                              .build()
-                              .then(() => {
-
-            Jimp.read(image).then(im => {
-                chimpanzeeSubconscious.getChimpanzee().setImage(im)
-            }).then(() => {
-
-                const drawAndGetBest = () => {
-
-                    const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
-
-                    chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
-
-                        if(prediction.bestPrediction*100 > viewPrediction){
-                            setImage(prediction.bestImage)
-
-                            Jimp.read(prediction.bestImage).then(im => {
-                                chimpanzeeSubconscious.getChimpanzee().setImage(im)
-                            })
-
-                            setViewPrediction(prediction.bestPrediction*100)
-
-                        }
-
-                    }).then(() => {
-                        if(!isImageDrawing){
-                            setTimeout( drawAndGetBest, 0 ); 
-                        }
-                    })
-
-            }
-
-            drawAndGetBest();
-
-            })
-
-        })
-
+        drawNewImage()
     }
 
     const closeAlertDialogHandler = () => {
@@ -121,6 +141,8 @@ const DrawImage = () => {
 
     const refreshImage = () => {
         setImage(placeholder)
+        setDrawingTime(0)
+        setViewPrediction(0)
         setIsImageDrawing(false)
         setIsImageDrawn(false)
     }
@@ -129,6 +151,8 @@ const DrawImage = () => {
         setImage(placeholder)
         setIsImageDrawn(false)
         setIsImageDrawing(true)
+        setDrawingTime(0)
+        setViewPrediction(0)
     }
 
     const drawImageDialog = <AlertDialog 
@@ -146,6 +170,7 @@ const DrawImage = () => {
                    image={image}
                    viewPrediction={viewPrediction}
                    isDrawing={isImageDrawing}
+                   drawingTime={drawingTime}
                    setDrawing={(params) => setIsImageDrawing(params)}
                    setIsDrawn={(params) => setIsImageDrawn(params)}
                    refreshImage={() => refreshImage()}/>

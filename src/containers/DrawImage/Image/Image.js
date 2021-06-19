@@ -117,13 +117,17 @@ return(
                 </CardActionArea>
                 <CardActions>
                 <Grid container spacing={0}>
-                    <Grid item xs={5}>
+                    <Grid item xs={4}>
                         <Typography>
                             View: {props.viewPrediction.toFixed(2)} %
                         </Typography>
                     </Grid>
-                    <Grid item xs={2} />
-                    <Grid item xs={5}>
+                    <Grid item xs={4}>
+                        <Typography>
+                            Time: {props.drawingTime} s
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
                         <Button size="small" 
                                 color={stopColor}
                                 style={{marginTop:"-10px"}}

@@ -1,7 +1,9 @@
-class RandomEffect {
+import DrawableAdapter from "./DrawableAdapter";
+
+class RandomEffect extends DrawableAdapter{
 
     constructor() {
-        
+        super();
     }
 
     draw(image) {

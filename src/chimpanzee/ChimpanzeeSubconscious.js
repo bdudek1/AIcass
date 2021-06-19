@@ -1,6 +1,5 @@
 import DrawableFactory from '../shapes/DrawableFactory';
 import ChimpanzeeWithBrush from '../chimpanzee/ChimpanzeeWithBrush';
-import RandomEffect from '../shapes/RandomEffect';
 
 class ChimpanzeeSubconscious {
     MAX_BRUSH_STROKES = parseInt(process.env.REACT_APP_MAX_BRUSH_STROKES)
@@ -47,7 +46,7 @@ class ChimpanzeeSubconscious {
                             this.bestViewPrediction = pred;
                         }
 
-                        console.log(i)
+                        //console.log(i)
                         i++; 
                     })
 
@@ -55,7 +54,7 @@ class ChimpanzeeSubconscious {
             
             const t2 = performance.now()
 
-            console.log(`PROCESSING IMAGES CHILDREN DONE IN ${t2 - t1} [MS]`)
+            //console.log(`PROCESSING IMAGES CHILDREN DONE IN ${t2 - t1} [MS]`)
 
             resolve({bestPrediction: this.getChimpanzee().getBestPrediction(), bestImage: this.getChimpanzee().getBestImage()})
         })

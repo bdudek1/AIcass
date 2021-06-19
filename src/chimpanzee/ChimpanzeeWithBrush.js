@@ -82,7 +82,7 @@ class ChimpanzeeWithBrush {
 
                     const t2 = performance.now()
 
-                    console.log(`CONVERTING IMAGE TO TENSOR AND PREDICTING IF IT IS A VIEW DONE IN ${t2 - t1} [MS]`)
+                    //console.log(`CONVERTING IMAGE TO TENSOR AND PREDICTING IF IT IS A VIEW DONE IN ${t2 - t1} [MS]`)
 
                     resolve(classification)
                 })

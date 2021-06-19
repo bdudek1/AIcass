@@ -1,17 +1,17 @@
 import Point from '../shapes/Point';
+import DrawableAdapter from './DrawableAdapter';
 
-class RandomPixels {
-    IMAGE_WIDTH;
-    IMAGE_HEIGHT;
+class RandomPixels extends DrawableAdapter {
+    IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
+    IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
 
     amountOfPixels;
     color;
 
     constructor(amountOfPixels, color){
+        super();
         this.amountOfPixels = amountOfPixels;
         this.color = color;
-        this.IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
-        this.IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
     }
 
     draw(image) {
