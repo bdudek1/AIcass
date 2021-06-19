@@ -1,20 +1,14 @@
-import ShapeFactory from '../shapes/ShapeFactory';
+import DrawableFactory from '../shapes/DrawableFactory';
 import ChimpanzeeWithBrush from '../chimpanzee/ChimpanzeeWithBrush';
+import RandomEffect from '../shapes/RandomEffect';
 
 class ChimpanzeeSubconscious {
     MAX_BRUSH_STROKES = parseInt(process.env.REACT_APP_MAX_BRUSH_STROKES)
     MINIMUM_BRUSH_STROKES = parseInt(process.env.REACT_APP_MIN_BRUSH_STROKES)
 
-    CIRCLES_FREQUENCY = parseInt(process.env.REACT_APP_CIRCLES_FREQUENCY)
-    ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_ELLIPSE_FREQUENCY)
-    RANDOM_PIXELS_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
-    RANDOM_EFFECT_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_EFFECT_FREQUENCY)
-
-
     chimpanzee;
 
     bestViewPrediction = 0;
-    bestImage;
 
     constructor() {
         this.chimpanzee = new ChimpanzeeWithBrush();
@@ -28,33 +22,11 @@ class ChimpanzeeSubconscious {
         return this.chimpanzee
     }
 
-    drawRandomShape(shapeNumber) {
-        switch(true){
-            case shapeNumber < this.RANDOM_EFFECT_FREQUENCY :
-                this.getChimpanzee().randomEffect()
-                break;
-            case shapeNumber < this.RANDOM_PIXELS_FREQUENCY :
-                const randomPixels = ShapeFactory.getRandomPixels()
-                this.getChimpanzee().drawRandomPixels(randomPixels.amountOfPixels, randomPixels.colour)
-                break;
-            case shapeNumber < this.CIRCLES_FREQUENCY :
-                const randomCircle = ShapeFactory.getRandomCircle()
-                this.getChimpanzee().drawCircle(randomCircle)
-                break;
-            case shapeNumber < this.ELLIPSE_FREQUENCY :
-                const randomEllipse = ShapeFactory.getRandomEllipse()
-                this.getChimpanzee().drawLeaningEllipse(randomEllipse)
-                break;
-        }
-    }
-
     drawRandomShapes(numberOfShapes) {
         let i = 0;
 
         while(i < numberOfShapes) {
-            const shapeNumber = Math.floor(Math.random() * 100);
-            this.drawRandomShape(shapeNumber)
-
+            DrawableFactory.getRandomDrawable().draw(this.getChimpanzee().getImage())
             i++;
         }
 
@@ -73,7 +45,6 @@ class ChimpanzeeSubconscious {
                     await this.getChimpanzee().getViewPrediction().then(pred => {
                         if(pred > this.bestViewPrediction){
                             this.bestViewPrediction = pred;
-                            this.bestImage = this.getChimpanzee().getImage()
                         }
 
                         console.log(i)

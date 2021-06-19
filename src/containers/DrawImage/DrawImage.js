@@ -74,32 +74,32 @@ const DrawImage = () => {
                 chimpanzeeSubconscious.getChimpanzee().setImage(im)
             }).then(() => {
 
-                    const myFunction = () => {
+                const drawAndGetBest = () => {
 
-                        const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
+                    const imagesChildrenAmount = Math.floor(Math.random() * IMAGE_CHILDREN_MAXIMUM_AMOUNT - IMAGE_CHILDREN_MINIMUM_AMOUNT) + IMAGE_CHILDREN_MINIMUM_AMOUNT;
 
-                        chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
+                    chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
 
-                            if(prediction.bestPrediction*100 > viewPrediction){
-                                setImage(prediction.bestImage)
+                        if(prediction.bestPrediction*100 > viewPrediction){
+                            setImage(prediction.bestImage)
 
-                                Jimp.read(prediction.bestImage).then(im => {
-                                    chimpanzeeSubconscious.getChimpanzee().setImage(im)
-                                })
+                            Jimp.read(prediction.bestImage).then(im => {
+                                chimpanzeeSubconscious.getChimpanzee().setImage(im)
+                            })
 
-                                setViewPrediction(prediction.bestPrediction*100)
+                            setViewPrediction(prediction.bestPrediction*100)
 
-                            }
+                        }
 
-                        }).then(() => {
-                            if(!isImageDrawing){
-                                setTimeout( myFunction, 5 ); 
-                            }
-                        })
+                    }).then(() => {
+                        if(!isImageDrawing){
+                            setTimeout( drawAndGetBest, 0 ); 
+                        }
+                    })
 
-                }
+            }
 
-                myFunction();
+            drawAndGetBest();
 
             })
 
@@ -137,7 +137,8 @@ const DrawImage = () => {
 
     return(
         <div className="DrawImage">
-            <Image disabled={isLoading}
+            <Image key={viewPrediction}
+                   disabled={isLoading}
                    clicked={downloadClickHandler}
                    showDialog={showDrawImageDialog}
                    closeDialog={closeAlertDialogHandler}

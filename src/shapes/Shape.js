@@ -10,7 +10,7 @@ class Shape {
     }
 
     getMiddlePoint() {
-        return this.middlePoint;
+        return this.middlePoint; 
     }
 
     getFillPercentage() {
@@ -19,6 +19,14 @@ class Shape {
 
     getColour() {
         return this.colour;
+    }
+
+    drawPixel(colour, point, image) {
+        image.setPixelColor(colour, point.getX(), point.getY());
+    }
+
+    draw(image) {
+
     }
   
 }

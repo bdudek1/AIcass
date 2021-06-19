@@ -1,12 +1,19 @@
 import Jimp from 'jimp';
-import Circle from '../shapes/Circle';
+
+import Circle from './Circle';
 import Ellipse from './Ellipse';
-
+import RandomPixels from './RandomPixels';
 import Point from "./Point";
+import RandomEffect from './RandomEffect';
 
-class ShapeCreator {
+class DrawableFactory {
     static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
     static IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
+
+    static CIRCLES_FREQUENCY = parseInt(process.env.REACT_APP_CIRCLES_FREQUENCY)
+    static ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_ELLIPSE_FREQUENCY)
+    static RANDOM_PIXELS_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
+    static RANDOM_EFFECT_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_EFFECT_FREQUENCY)
 
     static MAX_SHAPE_FILL_PERCENTAGE = parseInt(process.env.REACT_APP_MAX_SHAPE_FILL)
 
@@ -50,8 +57,28 @@ class ShapeCreator {
 
         const amountOfPixels = fillPercentage * this.IMAGE_WIDTH * this.IMAGE_HEIGHT / 100
 
-        return {amountOfPixels: amountOfPixels,
-                colour: this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()}
+        const colour = this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()
+
+        return new RandomPixels(amountOfPixels, colour)
+    }
+
+    static getRandomEffect() {
+        return new RandomEffect();
+    }
+
+    static getRandomDrawable() {
+        const shapeNumber = Math.floor(Math.random() * 100);
+
+        switch(true){
+            case shapeNumber < this.RANDOM_EFFECT_FREQUENCY :
+                return this.getRandomEffect()
+            case shapeNumber < this.RANDOM_PIXELS_FREQUENCY :
+                return this.getRandomPixels()
+            case shapeNumber < this.CIRCLES_FREQUENCY :
+                return this.getRandomCircle()
+            case shapeNumber < this.ELLIPSE_FREQUENCY :
+                return this.getRandomEllipse()
+        }
     }
 
     static getRandomGrayColour () {
@@ -70,4 +97,4 @@ class ShapeCreator {
     }
 }
 
-export default ShapeCreator
+export default DrawableFactory
