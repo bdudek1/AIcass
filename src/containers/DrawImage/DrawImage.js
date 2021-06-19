@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { useHistory } from 'react-router-dom';
+import { useStopwatch } from 'react-timer-hook';
 import Jimp from 'jimp';
 
 import placeholder from '../../assets/images/placeholder.png';
@@ -21,13 +22,14 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 const DrawImage = () => {
     const history = useHistory() 
 
+    const timer = useStopwatch({autoStart: false});
+
     const IMAGE_CHILDREN_MINIMUM_AMOUNT = parseInt(process.env.REACT_APP_MINIMUM_AMOUNT_OF_IMAGE_CHILDREN)
     const IMAGE_CHILDREN_MAXIMUM_AMOUNT = parseInt(process.env.REACT_APP_MAXIMUM_AMOUNT_OF_IMAGE_CHILDREN)
 
     const [image, setImage] = useState(placeholder)
 
     const [viewPrediction, setViewPrediction] = useState(0);
-    const [drawingTime, setDrawingTime] = useState(0);
 
     const { promiseInProgress } = usePromiseTracker();
 
@@ -57,18 +59,14 @@ const DrawImage = () => {
     }
 
     useEffect(() => {
-        history.listen(() => { 
-           console.log(`${history.location.pathname}`) 
-        }) 
         refreshImage()
         isImageDrawingRef.current = isImageDrawing;
-
      }, [history]) 
 
     useEffect(() => {
         if(isImageDrawing){
 
-            const startTime = drawingTime + performance.now()
+            timer.start()
 
             const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
     
@@ -97,7 +95,6 @@ const DrawImage = () => {
     
                             }
     
-                            setDrawingTime(drawingTime + Math.floor((performance.now() - startTime)/1000))
                         }).then(() => {
                             console.log(`IS IMAGE DRAWING BEFORE SET TIMEOUT: ${isImageDrawingRef.current}`)
                             if(isImageDrawingRef.current && history.location.pathname === "/"){
@@ -106,13 +103,15 @@ const DrawImage = () => {
                         })
     
                 }
-    
-                    drawAndGetBest();
-    
+                
+                drawAndGetBest();
                 })
     
             })
+        }else{
+            timer.pause()
         }
+
     }, [isImageDrawing])
     
     useEffect(() => {
@@ -141,17 +140,17 @@ const DrawImage = () => {
 
     const refreshImage = () => {
         setImage(placeholder)
-        setDrawingTime(0)
+        timer.reset()
         setViewPrediction(0)
         setIsImageDrawing(false)
         setIsImageDrawn(false)
     }
 
     const drawNewImage = () => {
+        timer.reset()
         setImage(placeholder)
         setIsImageDrawn(false)
         setIsImageDrawing(true)
-        setDrawingTime(0)
         setViewPrediction(0)
     }
 
@@ -170,7 +169,7 @@ const DrawImage = () => {
                    image={image}
                    viewPrediction={viewPrediction}
                    isDrawing={isImageDrawing}
-                   drawingTime={drawingTime}
+                   drawingTime={timer.seconds}
                    setDrawing={(params) => setIsImageDrawing(params)}
                    setIsDrawn={(params) => setIsImageDrawn(params)}
                    refreshImage={() => refreshImage()}/>

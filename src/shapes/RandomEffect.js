@@ -1,4 +1,4 @@
-import DrawableAdapter from "./DrawableAdapter";
+import DrawableAdapter from "../patterns/DrawableAdapter";
 
 class RandomEffect extends DrawableAdapter{
 

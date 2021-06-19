@@ -1,5 +1,5 @@
 import Point from '../shapes/Point';
-import DrawableAdapter from './DrawableAdapter';
+import DrawableAdapter from '../patterns/DrawableAdapter';
 
 class RandomPixels extends DrawableAdapter {
     IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)

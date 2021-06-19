@@ -1,9 +1,13 @@
-class Shape {
+import DrawableAdapter from "../patterns/DrawableAdapter";
+
+class Shape extends DrawableAdapter{
     middlePoint;
     fillPercentage;
     colour;
 
     constructor(middlePoint, fillPercentage, colour) {
+        super();
+        
         this.middlePoint = middlePoint;
         this.fillPercentage = fillPercentage;
         this.colour = colour;

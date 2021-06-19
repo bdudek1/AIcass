@@ -30,6 +30,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "react-textfit": "^1.1.1",
+    "react-timer-hook": "^3.0.4",
     "react-tooltip": "^4.2.15",
     "underscore-node": "^0.1.2",
     "web-vitals": "^1.1.0"

@@ -1,4 +1,4 @@
-import DrawableFactory from '../shapes/DrawableFactory';
+import DrawableFactory from '../patterns/DrawableFactory';
 import ChimpanzeeWithBrush from '../chimpanzee/ChimpanzeeWithBrush';
 
 class ChimpanzeeSubconscious {

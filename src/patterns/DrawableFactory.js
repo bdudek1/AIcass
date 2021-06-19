@@ -1,12 +1,12 @@
 import Jimp from 'jimp';
 
-import Circle from './Circle';
-import Ellipse from './Ellipse';
-import DenseCircle from './DenseCircle';
-import DenseEllipse from './DenseEllipse';
-import RandomPixels from './RandomPixels';
-import Point from "./Point";
-import RandomEffect from './RandomEffect';
+import Circle from '../shapes/Circle';
+import Ellipse from '../shapes/Ellipse';
+import DenseCircle from '../shapes/DenseCircle';
+import DenseEllipse from '../shapes/DenseEllipse';
+import RandomPixels from '../shapes/RandomPixels';
+import Point from "../shapes/Point";
+import RandomEffect from '../shapes/RandomEffect';
 
 class DrawableFactory {
     static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
