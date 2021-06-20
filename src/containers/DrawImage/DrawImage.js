@@ -169,7 +169,7 @@ const DrawImage = () => {
                    image={image}
                    viewPrediction={viewPrediction}
                    isDrawing={isImageDrawing}
-                   drawingTime={timer.seconds}
+                   drawingTime={timer.seconds + timer.minutes*60 + timer.hours*3600}
                    setDrawing={(params) => setIsImageDrawing(params)}
                    setIsDrawn={(params) => setIsImageDrawn(params)}
                    refreshImage={() => refreshImage()}/>
