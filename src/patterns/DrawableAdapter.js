@@ -4,6 +4,10 @@ class DrawableAdapter {
 
     }
 
+    drawPixel(colour, point, image) {
+        image.setPixelColor(colour, point.getX(), point.getY());
+    }
+
     draw(image) {
 
     }

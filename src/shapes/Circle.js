@@ -24,7 +24,7 @@ class Circle extends Shape {
                 let randomY = Math.floor(Math.random() * this.getRadius() * 2) - this.getRadius() + this.getMiddlePoint().getY();
                 let randomPoint = new Point(randomX, randomY)
 
-            //checking if the point is in the this, if not new one generated
+            //checking if the point is in the circle, if not new one generated
             while(MathUtils.getDistanceBetweenPoints(randomPoint, this.middlePoint) > this.radius){
                 randomX = Math.floor(Math.random() * this.getRadius() * 2) - this.getRadius() + this.getMiddlePoint().getX();
                 randomY = Math.floor(Math.random() * this.getRadius() * 2) - this.getRadius() + this.getMiddlePoint().getY();

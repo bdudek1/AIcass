@@ -24,14 +24,6 @@ class Shape extends DrawableAdapter{
     getColour() {
         return this.colour;
     }
-
-    drawPixel(colour, point, image) {
-        image.setPixelColor(colour, point.getX(), point.getY());
-    }
-
-    draw(image) {
-
-    }
   
 }
 

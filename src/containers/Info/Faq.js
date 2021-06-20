@@ -3,13 +3,13 @@ import React from 'react'
 import './Info.css';
 import '../../global_styles/styles.css'
 
-const Info = () => (
+const Faq = () => (
     <div className="Info">
         <text className="TextStyle">
-           <h3>About</h3>
-           <p>About coming soon</p>
+           <h3>FAQ</h3>
+           <p>FAQ coming soon</p>
         </text>
     </div>
 );
 
-export default Info;
+export default Faq;

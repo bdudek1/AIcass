@@ -7,6 +7,8 @@ class Ellipse extends Shape {
     width;
     angle;
 
+    MINIMUM_WIDTH = 25;
+
     constructor(middlePoint, fillPercentage, colour, height, width, angle){
         super(middlePoint, fillPercentage, colour)
         
@@ -37,7 +39,7 @@ class Ellipse extends Shape {
 
     draw(image) {
 
-        if(this.getWidth() < 20){
+        if(this.getWidth() < this.MINIMUM_WIDTH){
             return;
         }
 
