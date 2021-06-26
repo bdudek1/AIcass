@@ -70,7 +70,7 @@ const DrawImage = () => {
 
             const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
     
-            chimpanzeeSubconscious.getChimpanzee(image)
+            chimpanzeeSubconscious.getChimpanzee()
                                   .build()
                                   .then(() => {
     
@@ -84,7 +84,7 @@ const DrawImage = () => {
     
                         chimpanzeeSubconscious.drawAndPickBest(imagesChildrenAmount).then(prediction => {
     
-                            if(prediction.bestPrediction*100 > viewPrediction){
+                            if(prediction.bestPrediction*100 > viewPrediction && isImageDrawingRef.current){
                                 setImage(prediction.bestImage)
     
                                 Jimp.read(prediction.bestImage).then(im => {
@@ -103,8 +103,9 @@ const DrawImage = () => {
                         })
     
                 }
-                
+
                 drawAndGetBest();
+
                 })
     
             })
@@ -139,15 +140,17 @@ const DrawImage = () => {
     }
 
     const refreshImage = () => {
-        setImage(placeholder)
         timer.reset()
+        timer.pause()
         setViewPrediction(0)
         setIsImageDrawing(false)
-        setIsImageDrawn(false)
+        setIsImageDrawn(true)
+        setImage(placeholder)
     }
 
     const drawNewImage = () => {
         timer.reset()
+        timer.start()
         setImage(placeholder)
         setIsImageDrawn(false)
         setIsImageDrawing(true)
@@ -168,7 +171,7 @@ const DrawImage = () => {
                    isDrawn={isImageDrawn}
                    image={image}
                    viewPrediction={viewPrediction}
-                   isDrawing={isImageDrawing}
+                   isDrawing={isImageDrawingRef.current}
                    drawingTime={timer.seconds + timer.minutes*60 + timer.hours*3600}
                    setDrawing={(params) => setIsImageDrawing(params)}
                    setIsDrawn={(params) => setIsImageDrawn(params)}
