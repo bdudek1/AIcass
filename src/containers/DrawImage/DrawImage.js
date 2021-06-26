@@ -64,7 +64,7 @@ const DrawImage = () => {
      }, [history]) 
 
     useEffect(() => {
-        if(isImageDrawing){
+        if(isImageDrawingRef.current){
 
             timer.start()
 
@@ -99,12 +99,16 @@ const DrawImage = () => {
                             console.log(`IS IMAGE DRAWING BEFORE SET TIMEOUT: ${isImageDrawingRef.current}`)
                             if(isImageDrawingRef.current && history.location.pathname === "/"){
                                 setTimeout( drawAndGetBest, 0 ); 
+                            }else{
+                                clearTimeout(drawAndGetBest);
                             }
                         })
     
                 }
 
-                drawAndGetBest();
+                if(isImageDrawingRef.current){
+                    drawAndGetBest();   
+                }
 
                 })
     

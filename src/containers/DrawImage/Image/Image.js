@@ -95,7 +95,7 @@ return(
             <div>{props.showDialog ? drawImageDialog : null}</div>
             <Card className="Image">
                 <CardActionArea>
-                <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/>
+                {showNftButton ?  <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/> : null}
                     <CardMedia
                         component="img"
                         height="320"
