@@ -10,12 +10,17 @@ import { usePromiseTracker } from "react-promise-tracker";
 import './DrawImage.css';
 
 import ChimpanzeeSubconscious from '../../chimpanzee/ChimpanzeeSubconscious';
+import SavedImage from '../../savedImage/SavedImage';
+import LocalImageRepository from '../../repositories/LocalImageRepository'
 
 import Button from '../../components/UI/Button/Button';
 import Image from './Image/Image';
 import BrushIcon from '@material-ui/icons/Brush';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AlertDialog from '../../components/AlertDialog/AlertDialog';
+import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 
@@ -28,15 +33,20 @@ const DrawImage = () => {
     const IMAGE_CHILDREN_MAXIMUM_AMOUNT = parseInt(process.env.REACT_APP_MAXIMUM_AMOUNT_OF_IMAGE_CHILDREN)
 
     const [image, setImage] = useState(placeholder)
+    const [imageName, setImageName] = useState("name")
 
     const [viewPrediction, setViewPrediction] = useState(0);
 
     const { promiseInProgress } = usePromiseTracker();
 
     const [isLoading, setIsLoading] = useState(false);
-    const [isImageDrawn, setIsImageDrawn] = useState(false);
+    const [isImageRefreshed, setIsImageRefreshed] = useState(false);
     const [isImageDrawing, setIsImageDrawing] = useState(false)
-    const [showDrawImageDialog, setShowDrawImageDialog] = useState(false);
+
+    const [showSaveImageDialog, setShowSaveImageDialog] = useState(false);
+    const [showSuccessSaveSnackbar, setShowSuccessSaveSnackbar] = useState(false);
+    const [showFailureSaveSnackbar, setShowFailureSaveSnackbar] = useState(false);
+
 
     const isImageDrawingRef = useRef(isImageDrawing);
     isImageDrawingRef.current = isImageDrawing;
@@ -66,6 +76,10 @@ const DrawImage = () => {
     useEffect(() => {
         if(isImageDrawingRef.current){
 
+            if(isImageRefreshed){
+                timer.reset()
+                setIsImageRefreshed(false)
+            }
             timer.start()
 
             const chimpanzeeSubconscious = new ChimpanzeeSubconscious()
@@ -96,7 +110,6 @@ const DrawImage = () => {
                             }
     
                         }).then(() => {
-                            console.log(`IS IMAGE DRAWING BEFORE SET TIMEOUT: ${isImageDrawingRef.current}`)
                             if(isImageDrawingRef.current && history.location.pathname === "/"){
                                 setTimeout( drawAndGetBest, 0 ); 
                             }else{
@@ -113,6 +126,7 @@ const DrawImage = () => {
                 })
     
             })
+
         }else{
             timer.pause()
         }
@@ -131,13 +145,17 @@ const DrawImage = () => {
         drawNewImage()
     }
 
-    const closeAlertDialogHandler = () => {
-        setShowDrawImageDialog(false);
+    const closeSaveImageDialogHandler = () => {
+        setShowSaveImageDialog(false);
+    }
+
+    const openSaveImageDialogHandler = () => {
+        setShowSaveImageDialog(true);
     }
 
     const downloadClickHandler = () => {
-        if(!isImageDrawn){
-            setShowDrawImageDialog(true);
+        if(!isImageRefreshed){
+
         }else{
             //download
         }
@@ -148,7 +166,7 @@ const DrawImage = () => {
         timer.pause()
         setViewPrediction(0)
         setIsImageDrawing(false)
-        setIsImageDrawn(true)
+        setIsImageRefreshed(true)
         setImage(placeholder)
     }
 
@@ -156,29 +174,68 @@ const DrawImage = () => {
         timer.reset()
         timer.start()
         setImage(placeholder)
-        setIsImageDrawn(false)
+        setIsImageRefreshed(false)
         setIsImageDrawing(true)
         setViewPrediction(0)
     }
 
-    const drawImageDialog = <AlertDialog 
-                            open={showDrawImageDialog} 
-                            closed={closeAlertDialogHandler}>Please draw image first.</AlertDialog>
+    const saveImage = () => {
+        const creationTime = timer.seconds + timer.minutes*60 + timer.hours*3600;
+
+        const savedImage = new SavedImage(imageName, image, viewPrediction, creationTime);
+        
+        const imageRepo = new LocalImageRepository();
+
+        if(imageRepo.getImage(imageName)){
+            setShowFailureSaveSnackbar(true)
+        }else{
+            setShowSuccessSaveSnackbar(true)
+            imageRepo.saveImage(savedImage)
+        }
+
+        setShowSaveImageDialog(false)
+    }
+
+    const handleImageNameChange = (event) => {
+        setImageName(event.target.value)
+    }
+
+    const saveImageDialog = <AlertDialog 
+                                open={showSaveImageDialog} 
+                                closed={closeSaveImageDialogHandler}
+                                clicked={saveImage}
+                                buttonText="Save">Choose the image name.
+                                <div className="EditText">
+                                <TextField id="img-name"
+                                           label="Image name"
+                                           variant="outlined"
+                                           size="small"
+                                           value={imageName}
+                                           onChange={handleImageNameChange} />
+                                </div>
+    </AlertDialog>
+
+    const Alert = (props) => {
+        return <MuiAlert elevation={6}
+                         variant="filled"
+                         {...props} />;
+    }
 
     return(
         <div className="DrawImage">
             <Image key={viewPrediction}
                    disabled={isLoading}
                    clicked={downloadClickHandler}
-                   showDialog={showDrawImageDialog}
-                   closeDialog={closeAlertDialogHandler}
-                   isDrawn={isImageDrawn}
+                   showSaveDialog={showSaveImageDialog}
+                   closeSaveDialog={closeSaveImageDialogHandler}
+                   openSaveDialog={openSaveImageDialogHandler}
+                   isDrawn={isImageRefreshed}
                    image={image}
                    viewPrediction={viewPrediction}
                    isDrawing={isImageDrawingRef.current}
                    drawingTime={timer.seconds + timer.minutes*60 + timer.hours*3600}
                    setDrawing={(params) => setIsImageDrawing(params)}
-                   setIsDrawn={(params) => setIsImageDrawn(params)}
+                   setIsDrawn={(params) => setIsImageRefreshed(params)}
                    refreshImage={() => refreshImage()}/>
 
             <Button buttonWidth={buttonWidth}
@@ -202,6 +259,26 @@ const DrawImage = () => {
                 </Button>
 
             </a>
+
+            {showSaveImageDialog ? saveImageDialog : null}
+
+            <Snackbar open={showSuccessSaveSnackbar}
+                      autoHideDuration={5000} 
+                      onClose={() => setShowSuccessSaveSnackbar(false)} 
+                      style={{zIndex: '1000000'}}>
+                <Alert onClose={() => setShowSuccessSaveSnackbar(false)} severity="success">
+                    Image {imageName} saved to favorites!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={showFailureSaveSnackbar}
+                      autoHideDuration={5000}
+                      onClose={() => setShowFailureSaveSnackbar(false)} 
+                      style={{zIndex: '1000000'}}>
+                <Alert onClose={() => setShowFailureSaveSnackbar(false)} severity="error">
+                    Image {imageName} already exists! Choose another name.
+                </Alert>
+            </Snackbar>
 
         </div>
     );

@@ -1,18 +1,17 @@
-.Image {
+.SavedImage {
     height: fit-content;
-    padding: 10px;
-    padding-top: 25px;
+    padding: 25px;
     border-radius: 5px;
     box-shadow: none;
     width: 90%;
-    max-width: 410px;
+    max-width: 250px;
     margin: auto;
     align-content: center;
     transition: 0.3s ease-in-out all;
     display:inline-flexbox;
 }
 
-.Image:hover {
+.SavedImage:hover {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 8px;
 }
 

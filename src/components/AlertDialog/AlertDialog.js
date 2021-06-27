@@ -15,7 +15,9 @@ const alertDialog = (props) => {
             <div className="AlertDialog">
                 <div className="TextStyle">{props.children}</div>
                 <div style={{marginBottom:"-10px"}}>
-                    <Button clicked={props.closed}>Ok</Button>
+                    <Button clicked={props.clicked ? props.clicked : props.closed}>
+                        {props.buttonText ? props.buttonText : "Ok"}
+                    </Button>
                 </div>
             </div>
         </React.Fragment>

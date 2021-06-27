@@ -12,10 +12,10 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import RestorePageIcon from '@material-ui/icons/RestorePage';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import AlertDialog from '../../../components/AlertDialog/AlertDialog';
 import  '../../../components/UI/Button/MarkViewButton/MarkViewButton.css';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -44,11 +44,9 @@ const Image = (props) => {
             setStopColor("secondary")
             setStopText("STOP")
             setShowNftButton(false)
-            props.setIsDrawn(false)
         }else {
             setStopColor("primary")
             setStopText("CONTINUE")
-            props.setIsDrawn(true)
         }
     }
 
@@ -85,16 +83,13 @@ const Image = (props) => {
                                     <div>GET NFT</div>
                              </button>
 
-    const drawImageDialog = <AlertDialog 
-                                open={props.showDialog} 
-                                closed={props.closeDialog}>Please draw image first.</AlertDialog>
 return(
         <div>
             {props.disabled ? <Spinner isShown={props.disabled} /> : null}
 
-            <div>{props.showDialog ? drawImageDialog : null}</div>
             <Card className="Image">
                 <CardActionArea>
+                {showNftButton ?  <StarBorderIcon className="StarIcon" onClick={() => props.openSaveDialog()}/> : null}
                 {showNftButton ?  <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/> : null}
                     <CardMedia
                         component="img"
@@ -119,7 +114,7 @@ return(
                 <Grid container spacing={0}>
                     <Grid item xs={4}>
                         <Typography>
-                            View: {props.viewPrediction.toFixed(2)} %
+                            View: {isMobile ? props.viewPrediction.toFixed(1) : props.viewPrediction.toFixed(2)} %
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
