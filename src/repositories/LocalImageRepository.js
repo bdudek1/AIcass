@@ -1,6 +1,7 @@
 import SavedImage from "../savedImage/SavedImage";
+import ImageRepository from './ImageRepository'
 
-class LocalImageRepository {
+class LocalImageRepository extends ImageRepository{
 
     getImages() {
         const savedImages = new Array();

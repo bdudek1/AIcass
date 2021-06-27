@@ -18,12 +18,6 @@ const Favourites = () => {
         console.log(imageRepo.getImages())
         setSavedImages(imageRepo.getImages())
     }, [])
-
-    useEffect(() => {
-        if(savedImages[0]){
-            console.log(savedImages[0].image.currentSrc)
-        }
-    }, [savedImages])
     
     return (
         <div>
