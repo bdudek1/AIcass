@@ -12,6 +12,7 @@ import './DrawImage.css';
 import ChimpanzeeSubconscious from '../../chimpanzee/ChimpanzeeSubconscious';
 import SavedImage from '../../savedImage/SavedImage';
 import LocalImageRepository from '../../repositories/LocalImageRepository'
+import ImageCaretaker from '../../patterns/ImageCaretaker';
 
 import Button from '../../components/UI/Button/Button';
 import Image from './Image/Image';
@@ -23,11 +24,16 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import ImageMemento from '../../patterns/ImageMemento';
 
 const DrawImage = () => {
     const history = useHistory() 
 
     const timer = useStopwatch({autoStart: false});
+    const [additionalSeconds, setAdditionalSeconds] = useState(0);
+
+    const timerRef = useRef(timer.seconds + timer.minutes*60 + timer.hours*3600 + additionalSeconds);
+    timerRef.current = timer.seconds + timer.minutes*60 + timer.hours*3600 + additionalSeconds;
 
     const IMAGE_CHILDREN_MINIMUM_AMOUNT = parseInt(process.env.REACT_APP_MINIMUM_AMOUNT_OF_IMAGE_CHILDREN)
     const IMAGE_CHILDREN_MAXIMUM_AMOUNT = parseInt(process.env.REACT_APP_MAXIMUM_AMOUNT_OF_IMAGE_CHILDREN)
@@ -47,6 +53,7 @@ const DrawImage = () => {
     const [showSuccessSaveSnackbar, setShowSuccessSaveSnackbar] = useState(false);
     const [showFailureSaveSnackbar, setShowFailureSaveSnackbar] = useState(false);
 
+    const [imageCaretaker, setImageCaretaker] = useState(new ImageCaretaker());
 
     const isImageDrawingRef = useRef(isImageDrawing);
     isImageDrawingRef.current = isImageDrawing;
@@ -100,6 +107,9 @@ const DrawImage = () => {
     
                             if(prediction.bestPrediction*100 > viewPrediction && isImageDrawingRef.current){
                                 setImage(prediction.bestImage)
+                                console.log(timer)
+
+                                saveImageMemento(prediction.bestImage, timerRef.current, prediction.bestPrediction*100)
     
                                 Jimp.read(prediction.bestImage).then(im => {
                                     chimpanzeeSubconscious.getChimpanzee().setImage(im)
@@ -162,6 +172,7 @@ const DrawImage = () => {
     }
 
     const refreshImage = () => {
+        setAdditionalSeconds(0)
         timer.reset()
         timer.pause()
         setViewPrediction(0)
@@ -171,6 +182,7 @@ const DrawImage = () => {
     }
 
     const drawNewImage = () => {
+        setAdditionalSeconds(0)
         timer.reset()
         timer.start()
         setImage(placeholder)
@@ -198,6 +210,23 @@ const DrawImage = () => {
 
     const handleImageNameChange = (event) => {
         setImageName(event.target.value)
+    }
+
+    const saveImageMemento = (image, time, prediction) => {
+        imageCaretaker.addMemento(new ImageMemento(image, time, prediction))
+    }
+
+    const loadImageMemento = () => {
+        const currentMemento = imageCaretaker.getCurrentMemento();
+
+        console.log(currentMemento)
+
+        timer.reset()
+        timer.pause()
+
+        setAdditionalSeconds(currentMemento.creationTime)
+        setImage(currentMemento.image)
+        setViewPrediction(currentMemento.viewPercentage)
     }
 
     const saveImageDialog = <AlertDialog 
@@ -233,10 +262,12 @@ const DrawImage = () => {
                    image={image}
                    viewPrediction={viewPrediction}
                    isDrawing={isImageDrawingRef.current}
-                   drawingTime={timer.seconds + timer.minutes*60 + timer.hours*3600}
+                   drawingTime={timerRef.current}
                    setDrawing={(params) => setIsImageDrawing(params)}
                    setIsDrawn={(params) => setIsImageRefreshed(params)}
-                   refreshImage={() => refreshImage()}/>
+                   refreshImage={() => refreshImage()}
+                   loadImageMemento={(memento) => loadImageMemento(memento)}
+                   imageCaretaker={imageCaretaker}/>
 
             <Button buttonWidth={buttonWidth}
                     clicked={drawImageClickHandler} 

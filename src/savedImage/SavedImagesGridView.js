@@ -1,8 +1,13 @@
 import {useEffect, useState} from 'react'
+
+import './SavedImage.css';
+import Grid from '@material-ui/core/Grid';
+
 import SavedImageView from "./SavedImageView";
+import { Typography } from '@material-ui/core';
 
 const SavedImageGridView = (props) => {
-    const [savedImages, setSavedImages] = useState(new Array())
+    const [savedImages, setSavedImages] = useState(props.savedImages)
 
     useEffect(() => {
         const savedImagesBuf = new Array();
@@ -15,9 +20,20 @@ const SavedImageGridView = (props) => {
     }, [props.savedImages])
 
     return (
-        <div>
-            {savedImages}
+        <div className="SavedImageContainer">
+            <Grid   
+                    container
+                    direction="row"
+                    justify="center"
+                    alignCotnent="center"
+                    spacing={5}>
+                {savedImages.length > 0 ? savedImages : 
+                <Typography variant="h5">
+                    You have no favourite images, add some!
+                </Typography>}
+            </Grid>
         </div>
+
     )
 }
 

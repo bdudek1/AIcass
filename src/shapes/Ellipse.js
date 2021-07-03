@@ -7,7 +7,7 @@ class Ellipse extends Shape {
     width;
     angle;
 
-    MINIMUM_WIDTH = 25;
+    MINIMUM_WIDTH = 32;
 
     constructor(middlePoint, fillPercentage, colour, height, width, angle){
         super(middlePoint, fillPercentage, colour)

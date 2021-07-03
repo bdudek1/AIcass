@@ -6,7 +6,6 @@ import './Favourites.css';
 import '../../global_styles/styles.css'
 
 import LocalImageRepository from '../../repositories/LocalImageRepository';
-import SavedImageView from '../../savedImage/SavedImageView'
 import SavedImagesGridView from '../../savedImage/SavedImagesGridView'
 
 const Favourites = () => {

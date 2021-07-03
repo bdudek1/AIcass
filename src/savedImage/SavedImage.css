@@ -1,6 +1,6 @@
 .SavedImage {
     height: fit-content;
-    padding: 25px;
+    padding: 15px;
     border-radius: 5px;
     box-shadow: none;
     width: 90%;
@@ -38,6 +38,34 @@
     right: 3px;
 }
 
+.Icon {
+    color:rgb(87, 87, 87, 0.33);
+}
+
+.Icon:hover {
+    color:rgb(87, 87, 87, 0.66);
+    cursor: pointer;
+}
+
+.Popover:hover {
+    background-color:rgb(87, 87, 87, 0.2);
+}
+
+.PopoverText {
+    padding: 10px;
+}
+
+.SavedImageContainer {
+    margin-top: 10%;
+}
+
+@media(min-width: 768px) {
+    .SavedImageContainer {
+        margin-top: 10%;
+        margin-left: 7%;
+        margin-right: 7%;
+    }
+}
 
 @media (max-width: 768px){
 	.Image {
@@ -45,6 +73,14 @@
         padding-top: 20px;
         width: 92%
 	}
+
+    .SavedImageContainer {
+        margin-top: 20%;
+    }
+
+    .Popover:hover {
+        background-color:rgb(0, 0, 0, 0);
+    }
 }
 
 @media (max-width: 500px){

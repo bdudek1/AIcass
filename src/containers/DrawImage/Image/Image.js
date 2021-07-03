@@ -13,6 +13,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import RestorePageIcon from '@material-ui/icons/RestorePage';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import UndoIcon from '@material-ui/icons/Undo';
+import RedoIcon from '@material-ui/icons/Redo';
+
 import Grid from '@material-ui/core/Grid';
 
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -26,7 +29,7 @@ const Image = (props) => {
     const [stopColor, setStopColor] = useState("primary")
     const [stopText, setStopText] = useState("STOP")
 
-    const [showNftButton, setShowNftButton] = useState(false)
+    const [showButtons, setShowButtons] = useState(false)
 
     const isMobile = useMediaQuery('(max-width:768px)')
     const isSmallMobile = useMediaQuery('(max-width:500px)')
@@ -34,6 +37,10 @@ const Image = (props) => {
     useEffect(() => {
         handleIsDrawingChange()
     }, [props.isDrawing])
+
+    useEffect(() => {
+        console.log(props.imageCaretaker)
+    }, [props.imageCaretaker])
 
     const handleNftClick = () => {
         
@@ -43,25 +50,38 @@ const Image = (props) => {
         if(props.isDrawing){
             setStopColor("secondary")
             setStopText("STOP")
-            setShowNftButton(false)
+            setShowButtons(false)
         }else {
             setStopColor("primary")
             setStopText("CONTINUE")
+            setShowButtons(true)
         }
     }
 
     const handleStopClick = () => {
         if(stopText === "STOP"){
-            setShowNftButton(true)
+            setShowButtons(true)
+        }else{
+
+            props.imageCaretaker.clearFurtherMementos()
         }
 
         props.setDrawing(!props.isDrawing)
     }
 
     const handleRefreshClick = () => {
-        setShowNftButton(false)
-
+        setShowButtons(false)
+        
+        props.imageCaretaker.clearMementos();
         props.refreshImage()
+    }
+
+    const handleRedoClick = () => {
+        props.loadImageMemento(props.imageCaretaker.getNextMemento())
+    }
+
+    const handleUndoClick = () => {
+        props.loadImageMemento(props.imageCaretaker.getPreviousMemento())
     }
 
     buttonWidth = "110px";
@@ -76,12 +96,6 @@ const Image = (props) => {
         iconSize = 16;
     }
 
-    const buyNftButton =     <button
-                                className="MarkViewButton AsNonView"
-                                style={{marginTop: "-30px", marginLeft:"8px"}}
-                                onClick={handleNftClick}>
-                                    <div>GET NFT</div>
-                             </button>
 
 return(
         <div>
@@ -89,8 +103,10 @@ return(
 
             <Card className="Image">
                 <CardActionArea>
-                {showNftButton ?  <StarBorderIcon className="StarIcon" onClick={() => props.openSaveDialog()}/> : null}
-                {showNftButton ?  <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/> : null}
+                {showButtons ?  <StarBorderIcon className="StarIcon" onClick={() => props.openSaveDialog()}/> : null}
+                {showButtons ?  <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/> : null}
+                {showButtons && props.imageCaretaker.hasNext() ?  <RedoIcon className="RedoIcon" onClick={() => handleRedoClick()} /> : null}
+                {showButtons && props.imageCaretaker.hasPrevious() ?  <UndoIcon className="UndoIcon" onClick={() => handleUndoClick()} /> : null}
                     <CardMedia
                         component="img"
                         height="320"
@@ -99,8 +115,6 @@ return(
                         title="AICasso image"/>
                         <div style={{display: "flex", flexDirection: "column"}}
                                 data-tip="Only 3$!">
-
-                            {showNftButton ? buyNftButton : null}
                             
                             <ReactTooltip 
                                 backgroundColor="#33B7EE"
