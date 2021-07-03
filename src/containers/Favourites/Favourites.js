@@ -20,7 +20,8 @@ const Favourites = () => {
     
     return (
         <div>
-            <SavedImagesGridView savedImages={savedImages} />
+            <SavedImagesGridView savedImages={savedImages}
+                                 setSavedImages={(imgs) => setSavedImages(imgs)} />
         </div>
     )
 };

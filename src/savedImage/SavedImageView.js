@@ -39,7 +39,9 @@ const SavedImageView = (props) => {
     const deleteImage = () => {
         imageRepo.removeImage(props.savedImage.name)
 
-        window.location.reload()
+        props.setSavedImages(props.savedImages.filter(img => img.name !== props.savedImage.name))
+
+        setShowDeleteDialog(false)
     }
 
     const deleteImageDialog = <YesNoDialog 

@@ -13,7 +13,9 @@ const SavedImageGridView = (props) => {
         const savedImagesBuf = new Array();
 
         if(props.savedImages){
-            props.savedImages.forEach(img => savedImagesBuf.push(<SavedImageView savedImage={img}/>))
+            props.savedImages.forEach(img => savedImagesBuf.push(<SavedImageView savedImage={img}
+                                                                                 savedImages={props.savedImages}
+                                                                                 setSavedImages={props.setSavedImages}/>))
         }
 
         setSavedImages(savedImagesBuf)
