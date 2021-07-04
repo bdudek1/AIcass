@@ -192,7 +192,7 @@ const DrawImage = () => {
     }
 
     const saveImage = () => {
-        const creationTime = timer.seconds + timer.minutes*60 + timer.hours*3600;
+        const creationTime = timer.seconds + timer.minutes*60 + timer.hours*3600 + additionalSeconds;
 
         const savedImage = new SavedImage(imageName, image, viewPrediction, creationTime);
         
