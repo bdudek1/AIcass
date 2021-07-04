@@ -27,7 +27,7 @@
 }
 
 .Tooltip {
-    font-weight: 400 !important;
+    z-index: 1000000 !important;
 }
 
 .AsView {

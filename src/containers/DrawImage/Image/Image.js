@@ -103,8 +103,8 @@ return(
 
             <Card className="Image">
                 <CardActionArea>
-                {showButtons ?  <StarBorderIcon className="StarIcon" onClick={() => props.openSaveDialog()}/> : null}
-                {showButtons ?  <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/> : null}
+                <StarBorderIcon className="StarIcon" onClick={() => props.openSaveDialog()}/>
+                <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/>
                 {showButtons && props.imageCaretaker.hasNext() ?  <RedoIcon className="RedoIcon" onClick={() => handleRedoClick()} /> : null}
                 {showButtons && props.imageCaretaker.hasPrevious() ?  <UndoIcon className="UndoIcon" onClick={() => handleUndoClick()} /> : null}
                     <CardMedia
@@ -121,8 +121,6 @@ return(
                                 borderColor="#B637F1"
                                 border="true" />
                         </div>
-                    <CardContent>
-                    </CardContent>
                 </CardActionArea>
                 <CardActions>
                 <Grid container spacing={0}>

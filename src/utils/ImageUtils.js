@@ -15,6 +15,14 @@ class ImageUtils{
             img.onerror = (err) => reject(err);  
     });}
 
+    static loadImageSrc(src) {  
+        return new Promise((resolve, reject) => { 
+            const img = new Image();    
+            img.src = src 
+            img.onload = () => resolve(img); 
+            img.onerror = (err) => reject(err);  
+    });}
+
 
     static convertImageToTensor(image, isDrawn) {  
         const tensorImage = tf.browser.fromPixels(image);

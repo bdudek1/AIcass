@@ -30,9 +30,11 @@ const SavedImageGridView = (props) => {
                     alignCotnent="center"
                     spacing={5}>
                 {savedImages.length > 0 ? savedImages : 
-                <Typography variant="h5">
-                    You have no favourite images, add some!
-                </Typography>}
+                <Grid item xs={10} sm={6}>
+                    <Typography variant="h6">
+                         You have no favourite images, add some!
+                    </Typography>
+                </Grid>}
             </Grid>
         </div>
 

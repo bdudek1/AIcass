@@ -20,7 +20,7 @@
     display: block;
     margin-top: -100px;
     margin-left: auto;
-    max-width: 380px;
+    width: 380px;
     box-sizing: border-box;
     z-index: 99999999;
     position: fixed;
@@ -33,14 +33,14 @@
 
 @media (max-width: 768px){
     .AlertDialog {
-         max-width: 300px;
+         width: 300px;
          left: calc(50% - 150px);
     }
 }
 
 @media (max-width: 600px){
     .AlertDialog {
-         max-width: 260px;
+         width: 260px;
          left: calc(50% - 130px);
     }
 }

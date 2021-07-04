@@ -1,5 +1,6 @@
 import SavedImage from "../savedImage/SavedImage";
 import ImageRepository from './ImageRepository'
+import ImageUtils from "../utils/ImageUtils";
 
 class LocalImageRepository extends ImageRepository{
 
@@ -20,8 +21,12 @@ class LocalImageRepository extends ImageRepository{
         if(!jsonSavedImage){
             return false;
         }
+        
         const image = new Image();
-        image.src = jsonSavedImage.image;
+
+        ImageUtils.loadImageSrc(jsonSavedImage.image).then((img) => {
+            image.src = img.src
+        })
 
         const savedImage = new SavedImage(jsonSavedImage.name, image, jsonSavedImage.viewPrediction, jsonSavedImage.creationTime)
         savedImage.setCreationDate(jsonSavedImage.creationDate)
