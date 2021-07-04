@@ -15,7 +15,3 @@
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: ease-in-out 0.5s all;
 }
-
-.TrainMe:hover {
-    box-shadow: rgba(51, 183, 238, 0.5) 3px 3px 6px 0px inset, rgba(51, 183, 238, 0.5) -3px -3px 6px 1px inset;
-}
