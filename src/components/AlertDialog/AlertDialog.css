@@ -9,21 +9,17 @@
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
-    width: 90%;
     margin: auto;
     font-size: larger;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     z-index: 10000;
-    position: relative;
-    top: 50%;
+    position: absolute;
+    top: calc(50% - 100px);
     left: calc(50% - 190px);
     display: block;
-    margin-top: -100px;
-    margin-left: auto;
     width: 380px;
     box-sizing: border-box;
     z-index: 99999999;
-    position: fixed;
     transition: 0.2s;
 }
 
