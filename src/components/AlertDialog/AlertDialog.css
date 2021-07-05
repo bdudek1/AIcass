@@ -5,7 +5,6 @@
     text-align: center;
     border-radius: 10px;
     box-shadow: rgba(0, 0, 0, 0.6) 0px 5px 15px;
-    /* box-shadow: 0px 10px 14px -7px #B637F1; */
     overflow-wrap: break-word;
     word-wrap: break-word;
     hyphens: auto;
@@ -13,7 +12,7 @@
     font-size: larger;
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     z-index: 10000;
-    position: absolute;
+    position: fixed;
     top: calc(50% - 100px);
     left: calc(50% - 190px);
     display: block;
