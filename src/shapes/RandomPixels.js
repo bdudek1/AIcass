@@ -28,10 +28,6 @@ class RandomPixels extends DrawableAdapter {
         }
     }
 
-    drawPixel(color, point, image) {
-        image.setPixelColor(color, point.getX(), point.getY());
-    }
-
 }
 
 export default RandomPixels;

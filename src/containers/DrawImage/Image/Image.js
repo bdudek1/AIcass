@@ -38,14 +38,6 @@ const Image = (props) => {
         handleIsDrawingChange()
     }, [props.isDrawing])
 
-    useEffect(() => {
-        console.log(props.imageCaretaker)
-    }, [props.imageCaretaker])
-
-    const handleNftClick = () => {
-        
-    }
-
     const handleIsDrawingChange = () => {
         if(props.isDrawing){
             setStopColor("secondary")

@@ -46,7 +46,6 @@ class ChimpanzeeSubconscious {
                             this.bestViewPrediction = pred;
                         }
 
-                        //console.log(i)
                         i++; 
                     })
 

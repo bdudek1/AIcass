@@ -115,12 +115,12 @@ class DrawableFactory {
     }
 
     static getRandomColour () {
-        const red = Math.floor(Math.random() * 255);
-        const green = Math.floor(Math.random() * 255);
-        const blue = Math.floor(Math.random() * 255);
-        const opacity = Math.floor(Math.random() * 255);
+        const r = Math.floor(Math.random() * 255);
+        const g = Math.floor(Math.random() * 255);
+        const b = Math.floor(Math.random() * 255);
+        const a = Math.floor(Math.random() * 255);
 
-        return Jimp.rgbaToInt(red, green, blue, opacity);
+        return {r, g, b, a}
     }
 
     static getRandomMiddlePoint() {

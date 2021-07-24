@@ -14,7 +14,6 @@ const Favourites = () => {
     useEffect(() => {
         const imageRepo = new LocalImageRepository();
 
-        console.log(imageRepo.getImages())
         setSavedImages(imageRepo.getImages())
     }, [])
     

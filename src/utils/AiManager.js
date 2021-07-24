@@ -33,7 +33,6 @@ class AiManager{
         const highestPrediction = this.getHighestPredictions(prediction, 1);     
         const highestPredictionArray = Array.from(highestPrediction, ([name, value]) => ({ name, value }));
 
-        console.log(highestPredictionArray[0].name)
         return {name: highestPredictionArray[0].name, value: highestPredictionArray[0].value}
     }
 

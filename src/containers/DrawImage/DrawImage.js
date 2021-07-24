@@ -107,7 +107,6 @@ const DrawImage = () => {
     
                             if(prediction.bestPrediction*100 > viewPrediction && isImageDrawingRef.current){
                                 setImage(prediction.bestImage)
-                                console.log(timer)
 
                                 saveImageMemento(prediction.bestImage, timerRef.current, prediction.bestPrediction*100)
     
@@ -146,10 +145,6 @@ const DrawImage = () => {
     useEffect(() => {
         setIsLoading(promiseInProgress)
     }, [promiseInProgress])
-
-    useEffect(() => {
-        console.log(`VIEW PRED = ${viewPrediction}`)
-    }, [viewPrediction])
         
     const drawImageClickHandler = () => {
         drawNewImage()
@@ -218,8 +213,6 @@ const DrawImage = () => {
 
     const loadImageMemento = () => {
         const currentMemento = imageCaretaker.getCurrentMemento();
-
-        console.log(currentMemento)
 
         timer.reset()
         timer.pause()
