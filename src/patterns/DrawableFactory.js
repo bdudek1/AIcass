@@ -8,6 +8,7 @@ import DenseEllipse from '../shapes/DenseEllipse';
 import RandomPixels from '../shapes/RandomPixels';
 import Point from "../shapes/Point";
 import RandomEffect from '../shapes/RandomEffect';
+import RandomBlobs from '../shapes/RandomBlobs';
 
 class DrawableFactory {
     static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
@@ -20,6 +21,7 @@ class DrawableFactory {
     static DENSE_ELLIPSE_FREQUENCY = parseInt(process.env.REACT_APP_DENSE_ELLIPSE_FREQUENCY)
     static RANDOM_PIXELS_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_PIXELS_FREQUENCY)
     static RANDOM_EFFECT_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_EFFECT_FREQUENCY)
+    static RANDOM_BLOBS_FREQUENCY = parseInt(process.env.REACT_APP_RANDOM_BLOBS_FREQUENCY)
 
     static MAX_SHAPE_FILL_PERCENTAGE = parseInt(process.env.REACT_APP_MAX_SHAPE_FILL)
 
@@ -86,8 +88,14 @@ class DrawableFactory {
         return new RandomEffect();
     }
 
+    static getRandomBlobs() {
+        const colour = this.COLOR === "BLACK" ? this.getRandomGrayColour() : this.getRandomColour()
+
+        return new RandomBlobs(colour);
+    }
+
     static getRandomDrawable() {
-        const shapeNumber = Math.floor(Math.random() * this.DENSE_ELLIPSE_FREQUENCY);
+        const shapeNumber = Math.floor(Math.random() * this.RANDOM_BLOBS_FREQUENCY);
 
         switch(true){
             case shapeNumber < this.RANDOM_EFFECT_FREQUENCY :
@@ -104,6 +112,8 @@ class DrawableFactory {
                 return this.getRandomEllipse(false)
             case shapeNumber < this.DENSE_ELLIPSE_FREQUENCY :
                 return this.getRandomEllipse(true)
+            case shapeNumber < this.RANDOM_BLOBS_FREQUENCY :
+                return this.getRandomBlobs()
         }
 
     }

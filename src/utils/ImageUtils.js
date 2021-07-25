@@ -1,4 +1,5 @@
 import * as tf from '@tensorflow/tfjs';
+import Jimp from 'jimp';
 
 class ImageUtils{
     static IMAGE_TENSOR_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_TENSOR_HEIGHT)
@@ -61,6 +62,20 @@ class ImageUtils{
     static batchImageTensor(image) {
         const batchedImage = image.expandDims(0);  
         return batchedImage.toFloat().div(tf.scalar(127)).sub(tf.scalar(1));
+    }
+
+    static isPointThisColor(image, point, color){
+        let wantedColor = {...color, r: color.r/2, g: color.g/2, b: color.b/2}
+        let encounteredColor = Jimp.intToRGBA(image.getPixelColor(point.getX(), point.getY()))
+
+        let differencePoints = 0;
+
+        differencePoints += Math.abs(wantedColor.r - encounteredColor.r)
+        differencePoints += Math.abs(wantedColor.g - encounteredColor.g)
+        differencePoints += Math.abs(wantedColor.b - encounteredColor.b)
+        differencePoints += Math.abs(wantedColor.a - encounteredColor.a)
+
+        return differencePoints < 100
     }
 
 }
