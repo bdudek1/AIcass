@@ -79,11 +79,13 @@ class AiManager{
 
          return new Promise(resolve => {
              tf.tidy(() => {
-                ImageUtils.loadImage(new Blob([image.buffer], { type: 'image/png' })).then(img => {
+                ImageUtils.loadImage(new Blob([image.buffer], { type: 'image/jpg' })).then(img => {
                     const tensor = ImageUtils.convertImageToTensor(img, false)
 
                     const viewPrediction = this.getPredictionByTensor(tensor)
                     resolve(this.classifyPrediction(viewPrediction))
+                }).catch(error => {
+                    console.log(error)
                 })
             })
          })

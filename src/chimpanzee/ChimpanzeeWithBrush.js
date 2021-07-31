@@ -44,7 +44,7 @@ class ChimpanzeeWithBrush {
 
     getBase64Image() {
         return new Promise(resolve => {
-            this.getImage().getBase64Async(Jimp.AUTO).then(img => {
+            this.getImage().getBase64Async(Jimp.MIME_JPEG).then(img => {
                 resolve(img);
             })
         })
@@ -70,7 +70,7 @@ class ChimpanzeeWithBrush {
         const t1 = performance.now()
 
         return new Promise((resolve) => {
-            this.getImage().getBufferAsync(Jimp.MIME_PNG).then(image => {
+            this.getImage().getBufferAsync(Jimp.MIME_JPEG).then(image => {
                 AiManager.classifyDrawnImage(image).then(classification => {
 
                     if(classification > this.bestPrediction){

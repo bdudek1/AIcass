@@ -6,7 +6,7 @@ class ImageCaretaker {
         let isMementoAlreadyAdded = false;
 
         this.imageMementos.forEach(mem => {
-            if(mem && mem.viewPercentage === memento.viewPercentage){
+            if((mem.viewPercentage === memento.viewPercentage && !memento.isStep && !mem.isStep) && mem.viewPercentage !== undefined){
                 isMementoAlreadyAdded = true;
             }
         })
@@ -40,6 +40,14 @@ class ImageCaretaker {
         return this.imageMementos[this.currentIndex];
     }
 
+    setCurrentMementoViewPercentage(viewPercentage){
+        this.getCurrentMemento().viewPercentage = viewPercentage
+    }
+
+    setCurrentMementoImage(image){
+        this.getCurrentMemento().image = image
+    }
+
     getPreviousMemento() {
         if(this.hasPrevious()){
             this.currentIndex = this.currentIndex - 1;
@@ -51,6 +59,30 @@ class ImageCaretaker {
     getNextMemento() {
         if(this.hasNext()){
             this.currentIndex = this.currentIndex + 1;
+        }
+
+        return this.imageMementos[this.currentIndex];
+    }
+
+    getPreviousNonStepMemento() {
+        while(this.hasPrevious()){
+            this.currentIndex = this.currentIndex - 1;
+
+            if(this.getCurrentMemento().isStep === false){
+                break;
+            }
+        }
+
+        return this.imageMementos[this.currentIndex];
+    }
+
+    getNextNonStepMemento() {
+        while(this.hasNext()){
+            this.currentIndex = this.currentIndex + 1;
+
+            if(this.getCurrentMemento().isStep === false){
+                break;
+            }
         }
 
         return this.imageMementos[this.currentIndex];

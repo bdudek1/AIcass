@@ -7,7 +7,6 @@ import '../../../global_styles/styles.css'
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -15,6 +14,8 @@ import RestorePageIcon from '@material-ui/icons/RestorePage';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 import UndoIcon from '@material-ui/icons/Undo';
 import RedoIcon from '@material-ui/icons/Redo';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -69,10 +70,18 @@ const Image = (props) => {
     }
 
     const handleRedoClick = () => {
-        props.loadImageMemento(props.imageCaretaker.getNextMemento())
+        props.loadImageMemento(props.imageCaretaker.getNextNonStepMemento())
     }
 
     const handleUndoClick = () => {
+        props.loadImageMemento(props.imageCaretaker.getPreviousNonStepMemento())
+    }
+
+    const handleNextClick = () => {
+        props.loadImageMemento(props.imageCaretaker.getNextMemento())
+    }
+
+    const handlePreviousClick = () => {
         props.loadImageMemento(props.imageCaretaker.getPreviousMemento())
     }
 
@@ -99,6 +108,8 @@ return(
                 <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/>
                 {showButtons && props.imageCaretaker.hasNext() ?  <RedoIcon className="RedoIcon" onClick={() => handleRedoClick()} /> : null}
                 {showButtons && props.imageCaretaker.hasPrevious() ?  <UndoIcon className="UndoIcon" onClick={() => handleUndoClick()} /> : null}
+                {showButtons && props.imageCaretaker.hasNext() ?  <ArrowRightIcon className="NextIcon" onClick={() => handleNextClick()} /> : null}
+                {showButtons && props.imageCaretaker.hasPrevious() ?  <ArrowLeftIcon className="PreviousIcon" onClick={() => handlePreviousClick()} /> : null}
                     <CardMedia
                         component="img"
                         height="320"
@@ -118,7 +129,9 @@ return(
                 <Grid container spacing={0}>
                     <Grid item xs={4}>
                         <Typography>
-                            View: {isMobile ? props.viewPrediction.toFixed(1) : props.viewPrediction.toFixed(2)} %
+                            View: {isMobile ? 
+                            (props.viewPrediction !== undefined ? props.viewPrediction.toFixed(1) : 0) : 
+                            (props.viewPrediction !== undefined ? props.viewPrediction.toFixed(2) : 0)} %
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
