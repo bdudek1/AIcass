@@ -24,6 +24,7 @@ class DrawableAdapter {
         this.drawSurroundingPoints(new BrushTap(point, pointsRadius, pointsOpacity).getPointsToPaint(), color, image)
     }
 
+    
     draw(image) {
 
     }

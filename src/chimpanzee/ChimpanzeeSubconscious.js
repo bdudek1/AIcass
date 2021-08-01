@@ -43,16 +43,15 @@ class ChimpanzeeSubconscious {
             while(i < numberOfTries) {
                 const brushStrokes = Math.floor(Math.random() * this.MAX_BRUSH_STROKES - this.MINIMUM_BRUSH_STROKES) + this.MINIMUM_BRUSH_STROKES;
 
-                    const imageStepsBuf = this.drawRandomShapesAndGetSteps(brushStrokes)
+                imgSteps = this.drawRandomShapesAndGetSteps(brushStrokes)
 
-                    await this.getChimpanzee().getViewPrediction().then(pred => {
-                        if(pred > this.bestViewPrediction){
-                            this.bestViewPrediction = pred;
-                            imgSteps = imageStepsBuf
-                        }
+                await this.getChimpanzee().getViewPrediction().then(pred => {
+                    if(pred > this.bestViewPrediction){
+                        this.bestViewPrediction = pred;
+                    }
 
-                        i++; 
-                    })
+                    i++; 
+                })
 
             }
             

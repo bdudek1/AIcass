@@ -109,13 +109,7 @@ const DrawImage = () => {
                             if(prediction.bestPrediction*100 > viewPrediction && isImageDrawingRef.current){
                                 setImage(prediction.bestImage)
 
-                                prediction.imageSteps.forEach(imgStep => {
-                                    saveImageMemento(imgStep, timerRef.current, undefined, true)
-                                })
-
                                 saveImageMemento(prediction.bestImage, timerRef.current, prediction.bestPrediction*100, false)
-
-                                console.log(imageCaretaker)
     
                                 Jimp.read(prediction.bestImage).then(im => {
                                     chimpanzeeSubconscious.getChimpanzee().setImage(im)
@@ -214,39 +208,19 @@ const DrawImage = () => {
         setImageName(event.target.value)
     }
 
-    const saveImageMemento = (image, time, prediction, isStep) => {
-        imageCaretaker.addMemento(new ImageMemento(image, time, prediction, isStep))
+    const saveImageMemento = (image, time, prediction) => {
+        imageCaretaker.addMemento(new ImageMemento(image, time, prediction))
     }
 
     const loadImageMemento = async () => {
         const currentMemento = imageCaretaker.getCurrentMemento();
-        let loadedImage;
-
-        if(/*currentMemento.viewPrediction === undefined*/currentMemento.isStep) {
-            await currentMemento.image.getBase64Async(Jimp.MIME_JPEG).then(img => {
-                loadedImage = img
-            })
-        }else{
-            loadedImage = currentMemento.image
-        }
 
         timer.reset()
         timer.pause()
 
         setAdditionalSeconds(currentMemento.creationTime)
-        setImage(loadedImage)
+        setImage(currentMemento.image)
         setViewPrediction(currentMemento.viewPercentage)
-
-        if(currentMemento.viewPercentage === undefined && currentMemento.isStep){
-            currentMemento.image.getBufferAsync(Jimp.MIME_JPEG).then(image => {
-                aiManagerInstance.classifyDrawnImage(image).then(classification => {
-                    setViewPrediction(classification)
-                    imageCaretaker.setCurrentMementoViewPercentage(classification)
-                    //imageCaretaker.setCurrentMementoImage(loadedImage)
-                })
-            })
-
-        }
         
     }
 

@@ -1,21 +1,20 @@
 class ImageCaretaker {
+    maxMementosNumber = 100;
     currentIndex = 0;
     imageMementos = new Array();
 
     addMemento = (memento) => {
-        let isMementoAlreadyAdded = false;
 
-        this.imageMementos.forEach(mem => {
-            if((mem.viewPercentage === memento.viewPercentage && !memento.isStep && !mem.isStep) && mem.viewPercentage !== undefined){
-                isMementoAlreadyAdded = true;
-            }
-        })
-
-        if(!isMementoAlreadyAdded && memento){
+        if(!this.isMementoDuplicated(memento)){
             this.imageMementos.push(memento)
+
+            if(this.imageMementos.length > this.maxMementosNumber){
+                this.imageMementos.shift();
+            }
 
             this.currentIndex = this.imageMementos.length - 1;
         }
+
     }
 
     clearMementos = () => {
@@ -48,6 +47,18 @@ class ImageCaretaker {
         this.getCurrentMemento().image = image
     }
 
+    isMementoDuplicated(memento){
+        let isMementoDuplicated = false;
+
+        this.imageMementos.forEach(mem => {
+            if(mem.viewPercentage === memento.viewPercentage){
+                isMementoDuplicated = true;
+            }
+        })
+
+        return isMementoDuplicated;
+    }
+
     getPreviousMemento() {
         if(this.hasPrevious()){
             this.currentIndex = this.currentIndex - 1;
@@ -59,30 +70,6 @@ class ImageCaretaker {
     getNextMemento() {
         if(this.hasNext()){
             this.currentIndex = this.currentIndex + 1;
-        }
-
-        return this.imageMementos[this.currentIndex];
-    }
-
-    getPreviousNonStepMemento() {
-        while(this.hasPrevious()){
-            this.currentIndex = this.currentIndex - 1;
-
-            if(this.getCurrentMemento().isStep === false){
-                break;
-            }
-        }
-
-        return this.imageMementos[this.currentIndex];
-    }
-
-    getNextNonStepMemento() {
-        while(this.hasNext()){
-            this.currentIndex = this.currentIndex + 1;
-
-            if(this.getCurrentMemento().isStep === false){
-                break;
-            }
         }
 
         return this.imageMementos[this.currentIndex];

@@ -11,6 +11,7 @@ import RandomEffect from '../shapes/RandomEffect';
 import RandomBlobs from '../shapes/RandomBlobs';
 
 class DrawableFactory {
+    
     static IMAGE_WIDTH = parseInt(process.env.REACT_APP_IMAGE_WIDTH)
     static IMAGE_HEIGHT = parseInt(process.env.REACT_APP_IMAGE_HEIGHT)
 

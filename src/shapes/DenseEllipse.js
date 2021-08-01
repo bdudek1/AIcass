@@ -56,6 +56,7 @@ class DenseEllipse extends Ellipse {
 
             pixelsDrawn++;
         }
+        
     }
 
 }

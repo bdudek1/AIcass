@@ -41,6 +41,7 @@ class Ring extends Circle {
 
             pixelsDrawn++;
         }
+        
     }
 }
 

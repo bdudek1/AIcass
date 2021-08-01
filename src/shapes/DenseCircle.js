@@ -32,6 +32,7 @@ class DenseCircle extends Circle {
 
             pixelsDrawn++;
         }
+        
     }
 }
 

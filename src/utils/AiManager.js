@@ -84,8 +84,6 @@ class AiManager{
 
                     const viewPrediction = this.getPredictionByTensor(tensor)
                     resolve(this.classifyPrediction(viewPrediction))
-                }).catch(error => {
-                    console.log(error)
                 })
             })
          })

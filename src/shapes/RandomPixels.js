@@ -26,6 +26,7 @@ class RandomPixels extends DrawableAdapter {
 
             i++
         }
+        
     }
 
 }

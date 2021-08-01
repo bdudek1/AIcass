@@ -70,18 +70,10 @@ const Image = (props) => {
     }
 
     const handleRedoClick = () => {
-        props.loadImageMemento(props.imageCaretaker.getNextNonStepMemento())
-    }
-
-    const handleUndoClick = () => {
-        props.loadImageMemento(props.imageCaretaker.getPreviousNonStepMemento())
-    }
-
-    const handleNextClick = () => {
         props.loadImageMemento(props.imageCaretaker.getNextMemento())
     }
 
-    const handlePreviousClick = () => {
+    const handleUndoClick = () => {
         props.loadImageMemento(props.imageCaretaker.getPreviousMemento())
     }
 
@@ -108,8 +100,6 @@ return(
                 <RestorePageIcon className="RefreshIcon" onClick={() => handleRefreshClick()}/>
                 {showButtons && props.imageCaretaker.hasNext() ?  <RedoIcon className="RedoIcon" onClick={() => handleRedoClick()} /> : null}
                 {showButtons && props.imageCaretaker.hasPrevious() ?  <UndoIcon className="UndoIcon" onClick={() => handleUndoClick()} /> : null}
-                {showButtons && props.imageCaretaker.hasNext() ?  <ArrowRightIcon className="NextIcon" onClick={() => handleNextClick()} /> : null}
-                {showButtons && props.imageCaretaker.hasPrevious() ?  <ArrowLeftIcon className="PreviousIcon" onClick={() => handlePreviousClick()} /> : null}
                     <CardMedia
                         component="img"
                         height="320"

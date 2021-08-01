@@ -35,6 +35,7 @@ class Circle extends Shape {
 
             pixelsDrawn++;
         }
+        
     }
 
 }
