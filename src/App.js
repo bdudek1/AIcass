@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router-dom';
 
 import Layout from './hoc/Layout/Layout';
 import Info from './containers/Info/Info';
-import Faq from './containers/Info/Faq';
 import DrawImage from './containers/DrawImage/DrawImage';
 import Favourites from './containers/Favourites/Favourites';
 import IdentifyImages from './containers/TrainMe/IdentifyImages';
@@ -19,7 +18,6 @@ class App extends Component {
                 <Route path="/identify" component={IdentifyImages} />
                 <Route path="/favourites" component={Favourites} />
                 <Route path="/" exact component={DrawImage} />
-                <Route path="/faq" component={Faq} />
                 <Route component={NotFound} />
               </Switch>
           </Layout>

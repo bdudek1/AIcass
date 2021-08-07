@@ -10,7 +10,7 @@
     align-items: center;
     padding: 0 20px;
     box-sizing: border-box;
-    z-index: 90;
+    z-index: 1000000;
     /* box-shadow: 0px 8px 14px -7px #33B7EE;  51, 183, 238*/
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }

@@ -20,9 +20,17 @@ class SavedImage {
     getName() {
         return this.name;
     }
+
+    getViewPrediction() {
+        return this.viewPrediction;
+    }
     
     setCreationDate(creationDate) {
         this.creationDate = creationDate;
+    }
+
+    getCreationDate(){
+        return this.creationDate;
     }
 }
 

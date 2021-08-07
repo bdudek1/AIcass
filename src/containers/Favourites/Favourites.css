@@ -1,1 +1,55 @@
+.tool-container {
+    margin-top: -80px;
+    max-width: 600px;
+    left: 7%;
+    z-index: 5000000 !important;
+    position: fixed;
+    display:inline-flex;
+    background-color: rgba(255, 255, 255, 0.822);
+    border-radius: 4px;
+}
 
+.search-field {
+    height: 40px;
+    width: 250px;
+}
+
+.sort-field {
+    height: 40px;
+    width: 250px;
+    margin-top: 16px;
+    margin-left: 15px;
+}
+
+.sort-field:hover, .search-field:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.popover {
+    margin-top: 100px;
+}
+
+@media (max-width: 768px){
+    .tool-container {
+        max-width: 400px;
+    }
+
+	.search-field {
+        width: 35%;
+        min-width: 850px;
+        padding: 3px;
+        left: 0%;
+    }
+    
+    .sort-field {
+        width: 35%;
+        min-width: 85px;
+        padding: 3px;
+        left: 0%;
+    }
+
+    .tool-container {
+        left: 3%;
+    }
+
+}

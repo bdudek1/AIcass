@@ -25,12 +25,17 @@ import useMouseDownPosition from '../utils/MouseDownPosition';
 const SavedImageView = (props) => {
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
     const [showInfo, setShowInfo] = useState(false)
+    const [savedImage, setSavedImage] = useState(props.savedImage)
     const [imageRepo, setImageRepo] = useState(new LocalImageRepository())
 
     const [infoX, setInfoX] = useState(0)
     const [infoY, setInfoY] = useState(0)
 
     const { x, y } = useMouseDownPosition();
+
+    useEffect(() => {
+        setSavedImage(props.savedImage)
+    }, [props.savedImage])
 
     const buyNftButton =     <button
                                 data-tip="Get NFT and make the image yours forever!"
@@ -51,9 +56,9 @@ const SavedImageView = (props) => {
     }, [x, y])
 
     const deleteImage = () => {
-        imageRepo.removeImage(props.savedImage.name)
+        imageRepo.removeImage(savedImage.name)
 
-        props.setSavedImages(props.savedImages.filter(img => img.name !== props.savedImage.name))
+        props.setSavedImages(props.savedImages.filter(img => img.name !== savedImage.name))
 
         setShowDeleteDialog(false)
     }
@@ -69,25 +74,25 @@ const SavedImageView = (props) => {
                                 
                                 
     return (
-            <Grid item xs={12} sm={4} key={props.savedImage.name}>
+            <Grid item xs={12} sm={4} key={savedImage.name}>
                 <Card className="SavedImage">
                     <Grid container spacing={0}>
                             <Grid item xs={11}>
                                 <Typography>
-                                    {props.savedImage.name}
+                                    {savedImage.name}
                                 </Typography>
                             </Grid>
                             <Grid item xs={1}>
                                 <CloseIcon className="Icon" onClick={onRemoveClicked}/>
                             </Grid>
                     </Grid>
-                    <CardActionArea key={props.savedImage.name}>  
+                    <CardActionArea key={savedImage.name}>  
                         <CardMedia
                             component="img"
                             height="200"
                             width="180"
-                            src={props.savedImage.image ? props.savedImage.image.currentSrc : <Skeleton variant="rect" />}
-                            title={props.savedImage ? props.savedImage.name : <Skeleton variant="text" />}/>
+                            src={savedImage.image ? savedImage.image.currentSrc : <Skeleton variant="rect" />}
+                            title={savedImage ? savedImage.name : <Skeleton variant="text" />}/>
                         <CardContent>
                         </CardContent>
                     </CardActionArea>
@@ -117,7 +122,7 @@ const SavedImageView = (props) => {
                 {showDeleteDialog ? deleteImageDialog : null}
 
                 <Popover
-                    id={props.savedImage.name}
+                    id={savedImage.name}
                     open={showInfo}
                     onClose={() => setShowInfo(false)}
                     className="Popover"
